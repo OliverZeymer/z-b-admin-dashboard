@@ -48,7 +48,7 @@ function App() {
         </BrowserRouter>
       </themeContext.Provider>
     </tokenContext.Provider>
-  );
+  )
 }
 
-export default App;
+export default App
