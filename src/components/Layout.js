@@ -6,7 +6,7 @@ const Layout = () => {
   const { setToken } = useContext(TokenContext);
 
   return (
-    <div>
+    <div className="mx-auto w-[90%]">
       <Navbar />
       <main>
         <Outlet />
