@@ -2,13 +2,23 @@ import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 import { motion } from "framer-motion"
+import { useState, useContext } from "react"
+import { AnimatePresence } from "framer-motion"
+import tokenContext from "../contexts/tokenContext"
 
+// Yup validation
 const schema = yup.object().shape({
   username: yup.string().required("You have to write an username."),
   password: yup.string().required("You have to write a password."),
 })
 
 const Login = () => {
+  // Token context
+  const { setToken } = useContext(tokenContext)
+
+  // Error message from server
+  const [errMsgFromServer, setErrMsgFromServer] = useState(null)
+
   const {
     register,
     handleSubmit,
@@ -19,8 +29,43 @@ const Login = () => {
   })
 
   const onSubmitHandler = (data) => {
-    console.log(data)
-    reset()
+    // Post userdata to server
+    fetch("https://admin-dashboard-be.herokuapp.com/auth", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      // Formatting data
+      body: JSON.stringify({
+        username: data.username,
+        password: data.password,
+      }),
+    })
+      // Error handling
+      .then((res) => {
+        // Successful
+        if (res.status >= "200" && res.status <= "299") {
+          return res.json()
+          // Client error
+        } else if (res.status >= "400" && res.status <= "499") {
+          throw new Error("Username or password is incorrect.")
+          // Server error
+        } else if (res.status >= "500" && res.status <= "599") {
+          throw new Error("Something went wrong, try again...")
+        }
+      })
+      // If good, set token in context
+      .then((data) => {
+        setToken(data.token)
+      })
+      .catch((err) => {
+        // Set error message in state
+        setErrMsgFromServer(err.toString())
+      })
+    // Resets password if error
+    reset({
+      password: null,
+    })
   }
 
   return (
@@ -38,7 +83,12 @@ const Login = () => {
             Username
           </label>
           <input
-            {...register("username")}
+            {...register("username", {
+              // Resets error from server when user types
+              onChange: (e) => {
+                setErrMsgFromServer(null)
+              },
+            })}
             className={`bg-primary-background p-4 focus:outline-text-primary-color mt-2 ${
               errors.username && "shake"
             }`}
@@ -54,7 +104,12 @@ const Login = () => {
             Password
           </label>
           <input
-            {...register("password")}
+            {...register("password", {
+              // Resets error from server when user types
+              onChange: (e) => {
+                setErrMsgFromServer(null)
+              },
+            })}
             className={`bg-primary-background p-4 focus:outline-text-primary-color mt-2 ${
               errors.password && "shake"
             }`}
@@ -78,6 +133,19 @@ const Login = () => {
         >
           LOG IN
         </motion.button>
+        <AnimatePresence>
+          {errMsgFromServer && (
+            // Animates error message from server in/out (conditional rendering)
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="text-center text-[1rem] text-red-600"
+            >
+              {errMsgFromServer}
+            </motion.p>
+          )}
+        </AnimatePresence>
       </form>
     </section>
   )
