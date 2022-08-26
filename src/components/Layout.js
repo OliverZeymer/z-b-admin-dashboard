@@ -1,10 +1,6 @@
-import { useContext } from "react";
-import { Outlet } from "react-router-dom";
-import TokenContext from "../contexts/tokenContext";
-import Navbar from "./Navbar";
+import { Outlet } from "react-router-dom"
+import Navbar from "./Navbar"
 const Layout = () => {
-  const { setToken } = useContext(TokenContext);
-
   return (
     <div className="mx-auto w-[90%]">
       <Navbar />
@@ -12,6 +8,6 @@ const Layout = () => {
         <Outlet />
       </main>
     </div>
-  );
-};
-export default Layout;
+  )
+}
+export default Layout
