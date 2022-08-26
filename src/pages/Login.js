@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
+import { motion } from "framer-motion"
 
 const schema = yup.object().shape({
   username: yup.string().required("You have to write an username."),
@@ -64,14 +65,19 @@ const Login = () => {
           />
           <p className="text-[1rem] text-red-600">{errors.password?.message}</p>
         </div>
-        <button
+        <motion.button
+          whileHover={{
+            scale: 1.05,
+            transition: { duration: 0.1 },
+          }}
+          whileTap={{ scale: 0.95 }}
           type="submit"
           aria-label="submit form button"
           spellCheck="false"
-          className="bg-primary-color text-white p-4 font-semibold tracking-wider mt-5 focus:bg-primary-background focus:text-primary-color transition-colors"
+          className="bg-primary-color text-white p-4 font-semibold tracking-wider mt-5 focus:bg-primary-background focus:text-primary-color hover:bg-primary-background hover:text-primary-color transition-colors"
         >
           LOG IN
-        </button>
+        </motion.button>
       </form>
     </section>
   )
