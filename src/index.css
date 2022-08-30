@@ -8,9 +8,9 @@
   --primary-text: #000000;
   --primary-background: #f8f8f8;
 
-  --purplemode-color: #000000;
-  --purplemode-text: #e1e2ef;
-  --purplemode-background: #6320ee;
+  --darkmode-color: #000000;
+  --darkmode-text: #e1e2ef;
+  --darkmode-background: #6320ee;
 }
 
 .shake {
