@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-const defaultTheme = require("tailwindcss/defaultTheme")
+const defaultTheme = require("tailwindcss/defaultTheme");
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
   theme: {
@@ -9,6 +9,7 @@ module.exports = {
           color: "var(--primary-color)",
           background: "var(--primary-background)",
           text: "var(--primary-text)",
+          theme: "var(--primary-theme)",
         },
       },
       fontFamily: {
@@ -26,8 +27,8 @@ module.exports = {
   },
   plugins: [
     function ({ addVariant }) {
-      addVariant("child", "& > *")
-      addVariant("child-hover", "& > *:hover")
+      addVariant("child", "& > *");
+      addVariant("child-hover", "& > *:hover");
     },
   ],
-}
+};

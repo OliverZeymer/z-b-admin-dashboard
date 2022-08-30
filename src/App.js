@@ -23,7 +23,8 @@ function App() {
   setColors(
     theme === "dark" ? "var(--darkmode-color)" : "",
     theme === "dark" ? "var(--darkmode-text)" : "",
-    theme === "dark" ? "var(--darkmode-background)" : ""
+    theme === "dark" ? "var(--darkmode-background)" : "",
+    theme === "dark" ? "var(--darkmode-theme)" : ""
   );
   /*------------------------------------------*/
 
@@ -48,7 +49,7 @@ function App() {
         </BrowserRouter>
       </themeContext.Provider>
     </tokenContext.Provider>
-  )
+  );
 }
 
-export default App
+export default App;
