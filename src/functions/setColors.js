@@ -1,4 +1,9 @@
-export function setColors(newPrimaryColor, newTextColor, newBackgroundColor) {
+export function setColors(
+  newPrimaryColor,
+  newTextColor,
+  newBackgroundColor,
+  newThemeColor
+) {
   document.documentElement.style.setProperty(
     "--primary-color",
     newPrimaryColor
@@ -7,5 +12,9 @@ export function setColors(newPrimaryColor, newTextColor, newBackgroundColor) {
   document.documentElement.style.setProperty(
     "--primary-background",
     newBackgroundColor
+  );
+  document.documentElement.style.setProperty(
+    "--primary-theme",
+    newThemeColor
   );
 }

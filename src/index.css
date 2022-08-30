@@ -7,10 +7,12 @@
   --primary-color: #6320ee;
   --primary-text: #000000;
   --primary-background: #f8f8f8;
+  --primary-theme: #ffffff;
 
-  --darkmode-color: #000000;
+  --darkmode-color: #6320ee;
   --darkmode-text: #e1e2ef;
   --darkmode-background: #6320ee;
+  --darkmode-theme: #000000;
 }
 
 .shake {
