@@ -1,10 +1,13 @@
+
 import { Outlet } from "react-router-dom";
 import Navbar from "./Navbar";
+import NotificationWidget from "./NotificationWidget"
 const Layout = () => {
   return (
     <>
       <Navbar />
-      <div className="mx-auto w-[90%]">
+      <NotificationWidget />
+      <div className="mx-auto w-[90%] relative">
         <main>
           <Outlet />
         </main>
@@ -12,4 +15,4 @@ const Layout = () => {
     </>
   );
 };
-export default Layout;
+
