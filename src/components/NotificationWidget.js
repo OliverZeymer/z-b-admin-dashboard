@@ -1,23 +1,20 @@
-/** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useContext } from "react"
 import notificationContext from "../contexts/notificationContext"
-import useAddNotification from "../functions/useAddNotification"
 import { IoCheckmarkCircleOutline } from "react-icons/io5"
 import { AiOutlineClose } from "react-icons/ai"
 
+import useDynamicFetch from "../hooks/useDynamicFetch"
+
 const NotificationWidget = () => {
   const { notification, setNotification } = useContext(notificationContext)
-
-  useAddNotification({
-    text: "stor numse lige i ansigt",
-  })
 
   function delNotification(id) {
     // Returns all notifications except the one with the id
     setNotification((prevState) => prevState.filter((item) => item.id !== id))
   }
+
+  useDynamicFetch("https://admin-dashboard-be.herokuapp.com/orders")
 
   return (
     <ul className="absolute right-2 top-5 flex flex-col gap-3">

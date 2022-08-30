@@ -13,7 +13,7 @@ import { useState } from "react"
 import themeContext from "./contexts/themeContext"
 import { setColors } from "./functions/setColors"
 function App() {
-  const [token, setToken] = useState(true)
+  const [token, setToken] = useState()
 
   /*-------------THEME LOCAL STORAGE---------- */
   const themeLS = JSON.parse(window.localStorage.getItem("theme"))
@@ -26,33 +26,33 @@ function App() {
     theme === "dark" ? "var(--darkmode-text)" : "",
     theme === "dark" ? "var(--darkmode-background)" : "",
     theme === "dark" ? "var(--darkmode-theme)" : ""
-  );
+  )
   /*------------------------------------------*/
 
   return (
-      <notificationContext.Provider value={{ notification, setNotification }}>
-    <tokenContext.Provider value={{ token, setToken }}>
-      <themeContext.Provider value={{ theme, setTheme }}>
-        <BrowserRouter>
-          <Routes>
-            {token ? (
-              <Route path="/" default element={<Layout />}>
-                <Route path="/orders" element={<Orders />} />
-                <Route path="/order/:id" element={<Order />} />
-                <Route path="/customers" element={<Customers />} />
-                <Route path="/customer/:id" element={<Customer />} />
-                <Route path="/products" element={<Products />} />
-                <Route path="/product/:id" element={<Product />} />
-              </Route>
-            ) : (
-              <Route path="/" default element={<Login />} />
-            )}
-          </Routes>
-        </BrowserRouter>
-      </themeContext.Provider>
-    </tokenContext.Provider>
+    <notificationContext.Provider value={{ notification, setNotification }}>
+      <tokenContext.Provider value={{ token, setToken }}>
+        <themeContext.Provider value={{ theme, setTheme }}>
+          <BrowserRouter>
+            <Routes>
+              {token ? (
+                <Route path="/" default element={<Layout />}>
+                  <Route path="/orders" element={<Orders />} />
+                  <Route path="/order/:id" element={<Order />} />
+                  <Route path="/customers" element={<Customers />} />
+                  <Route path="/customer/:id" element={<Customer />} />
+                  <Route path="/products" element={<Products />} />
+                  <Route path="/product/:id" element={<Product />} />
+                </Route>
+              ) : (
+                <Route path="/" default element={<Login />} />
+              )}
+            </Routes>
+          </BrowserRouter>
+        </themeContext.Provider>
+      </tokenContext.Provider>
     </notificationContext.Provider>
-  );
+  )
 }
 
-export default App;
+export default App
