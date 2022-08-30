@@ -1,7 +1,6 @@
-
 import { Outlet } from "react-router-dom";
 import Navbar from "./Navbar";
-import NotificationWidget from "./NotificationWidget"
+import NotificationWidget from "./NotificationWidget";
 const Layout = () => {
   return (
     <>
@@ -16,3 +15,4 @@ const Layout = () => {
   );
 };
 
+export default Layout;
