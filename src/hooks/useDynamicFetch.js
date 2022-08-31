@@ -1,5 +1,5 @@
 // Notes for me
-// PUT, PATCH, DELETE, POST, GET
+// PATCH, DELETE, POST, GET
 
 import { useEffect, useState, useContext } from "react"
 import tokenContext from "../contexts/tokenContext"
@@ -25,12 +25,10 @@ export default function useDynamicFetch({ params, method, data }) {
                 authorization: "Bearer " + token,
                 "Content-Type": "application/json",
               },
-              body: data === {} ? JSON.stringify(data) : null,
+              body: data !== null ? JSON.stringify(data) : null,
             }
           )
-
           const json = await response.json()
-          console.log(json)
           setFetchData(json)
           setIsLoading(false)
         } catch (error) {
