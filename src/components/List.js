@@ -1,8 +1,18 @@
-import { BsGift, BsTruck } from "react-icons/bs";
-const List = ({ data }) => {
-  console.log(data.headings);
+import {
+  BsGift,
+  BsTruck,
+  BsPrinter,
+  BsTrash,
+  BsPencilSquare,
+} from "react-icons/bs";
+import useDynamicFetch from "../hooks/useDynamicFetch";
+const List = ({ data, type }) => {
+  const { fetchData, isLoading, error } = useDynamicFetch({
+    params: `/${type}`,
+    method: "GET",
+  });
   return (
-    <table className="w-full shadow bg-primary-theme text-primary-text">
+    <table className="w-full shadow bg-primary-theme text-primary-text rounded">
       <thead className="text-primary-text border-gray text-left">
         <tr>
           {data?.headings?.map((heading, index) => (
@@ -13,41 +23,68 @@ const List = ({ data }) => {
         </tr>
       </thead>
 
-      <tbody class="bg-primary-theme">
-        <tr>
-          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-            <input
-              class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
-              type="checkbox"
-            />
-          </td>
-          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-            <div class="text-sm leading-5 ">lort</div>
-          </td>
-          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-            <div class="flex items-center">
-              <div class="flex-shrink-0 h-10 w-10"></div>
-              <div class="ml-4">
-                <div class="text-sm leading-5 font-medium "></div>
-              </div>
-            </div>
-          </td>
-          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-            <div class="text-sm leading-5 ">lort</div>
-          </td>
-          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-            <span class="px-2 inline-flex leading-5 font-semibold rounded-full">
-              <BsGift size="24" />
-            </span>
-            <span class=" inline-flex leading-5 font-semibold rounded-full">
-              <BsTruck size="24" />
-            </span>
-          </td>
-          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-primary-text">
-            lort
-          </td>
-          <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium"></td>
-        </tr>
+      <tbody className="bg-primary-theme">
+        {error && error}
+        {!isLoading ? (
+          fetchData?.map((item, index) => (
+            <tr key={index}>
+              <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                <input
+                  className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+                  type="checkbox"
+                />
+              </td>
+              <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                <div className="text-sm leading-5 ">
+                  <p>{item.orderDate}</p>
+                </div>
+              </td>
+              <td className="px-2 py-4 whitespace-no-wrap border-b border-gray-200">
+                <div className="flex items-center">
+                  <div className="ml-4">
+                    <div className="text-sm leading-5 font-medium">
+                      <p>{item.customerName}</p>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                <div className="text-sm leading-5 ">
+                  <p>{parseFloat(item.subTotal).toFixed(2)}$</p>
+                </div>
+              </td>
+              <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                <span className="px-2 inline-flex leading-5 font-semibold rounded-full">
+                  {item.parcelStatus === false ? (
+                    <BsGift size="24" color="#FF0000" />
+                  ) : (
+                    <BsGift size="24" color="#00ED00" />
+                  )}
+                </span>
+                <span className=" inline-flex leading-5 font-semibold rounded-full">
+                  {item.shippingStatus === false ? (
+                    <BsTruck size="24" color="#FF0000" />
+                  ) : (
+                    <BsTruck size="24" color="#00ED00" />
+                  )}
+                </span>
+              </td>
+              <td className="px-6 py-4 whitespace-no-wrap border-b text-right border-gray-200">
+                <span className="pr-2 inline-flex leading-5 font-semibold rounded-full">
+                  <BsPrinter size="24" />
+                </span>
+                <span className="pr-2 inline-flex leading-5 font-semibold rounded-full">
+                  <BsPencilSquare size="24" />
+                </span>
+                <span className="pr-2 inline-flex leading-5 font-semibold rounded-full">
+                  <BsTrash size="24" />
+                </span>
+              </td>
+            </tr>
+          ))
+        ) : (
+          <tr>Loading...</tr>
+        )}{" "}
       </tbody>
     </table>
   );

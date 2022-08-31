@@ -6,7 +6,7 @@ const Orders = () => {
   };
   return (
     <div>
-      <List data={list} />
+      <List data={list} type="orders" />
     </div>
   );
 };
