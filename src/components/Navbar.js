@@ -1,116 +1,83 @@
-import Theme from "./Theme";
 import {
   BsFillGrid1X2Fill,
   BsStickiesFill,
   BsFillPeopleFill,
   BsPlusCircle,
+  BsBrightnessHigh,
 } from "react-icons/bs";
 import { NavLink } from "react-router-dom";
+import { useContext } from "react";
+import themeContext from "../contexts/themeContext";
+import { setToLS } from "../functions/setToLS";
 
 const Navbar = () => {
+  const { theme, setTheme } = useContext(themeContext);
+  setToLS("theme", theme);
   return (
-    <>
-      <nav>
-        <aside className="hidden sm:block sticky left-0 w-[230px] h-screen bg-primary-theme">
-          <div className="nav__wrapper w-4/5 mx-auto py-8">
-            <h1 className="text-primary-color text-3xl font-semibold">
-              Eligöten.
-            </h1>
-            <ul className="flex justify-between gap-12 flex-col mt-24">
-              <NavLink
-                className={(navData) =>
-                  navData.isActive
-                    ? "text-primary-color gap-4 cursor-pointer hover:scale-105 transition-all text-[16px] flex font-medium"
-                    : "text-primary-text gap-4 cursor-pointer hover:scale-105 transition-all text-[16px] flex font-medium"
-                }
-                to="/orders"
-              >
-                <BsFillGrid1X2Fill size="24" /> Orders
-              </NavLink>
-              <NavLink
-                className={(navData) =>
-                  navData.isActive
-                    ? "text-primary-color gap-4 cursor-pointer hover:scale-105 transition-all text-[16px] flex font-medium"
-                    : "text-primary-text gap-4 cursor-pointer hover:scale-105 transition-all text-[16px] flex font-medium"
-                }
-                to="/customers"
-              >
-                <BsFillPeopleFill size="24" />
-                Customers
-              </NavLink>
-              <NavLink
-                className={(navData) =>
-                  navData.isActive
-                    ? "text-primary-color gap-4 cursor-pointer hover:scale-105 transition-all text-[16px] flex font-medium"
-                    : "text-primary-text gap-4 cursor-pointer hover:scale-105 transition-all text-[16px] flex font-medium"
-                }
-                to="/products"
-              >
-                <BsStickiesFill size="24" />
-                Product Control
-              </NavLink>
-              <NavLink
-                className={(navData) =>
-                  navData.isActive
-                    ? "text-primary-color gap-4 cursor-pointer hover:scale-105 transition-all text-[16px] flex font-medium"
-                    : "text-primary-text gap-4 cursor-pointer hover:scale-105 transition-all text-[16px] flex font-medium"
-                }
-                to="/product/1"
-              >
-                <BsPlusCircle size="24" />
-                Add/edit Product
-              </NavLink>
-            </ul>
-            <Theme />
-          </div>
-        </aside>
-      </nav>
-      <nav className="fixed block sm:hidden bottom-0 w-full bg-primary-theme shadow-2xl">
-        <ul className="flex justify-between px-6 m-4">
+    <nav className="flex fixed sm:static sm:block bottom-0 w-screen sm:w-[260px] sm:h-screen bg-primary-theme">
+      <div className="wrapper w-10/12 sm:w-4/5 mx-auto py-4 sm:py-8">
+        <h1 className="hidden sm:block text-primary-color text-3xl font-semibold">
+          Eligöten.
+        </h1>
+        <ul className="flex justify-between sm:gap-12 sm:flex-col sm:mt-24">
           <NavLink
             className={(navData) =>
               navData.isActive
-                ? "text-primary-color gap-4 cursor-pointer transition-all text-[16px] flex font-medium"
-                : "text-primary-text gap-4 cursor-pointer transition-all text-[16px] flex font-medium"
+                ? "text-primary-color gap-4 cursor-pointer hover:scale-105 transition-all text-[16px] flex font-medium"
+                : "text-primary-text gap-4 cursor-pointer hover:scale-105 transition-all text-[16px] flex font-medium"
             }
             to="/orders"
           >
-            <BsFillGrid1X2Fill size="32" />
+            <BsFillGrid1X2Fill className="w-[32px] h-[32px] sm:w-[24px] sm:h-[24px]" />{" "}
+            <p className="hidden sm:block">Orders</p>
           </NavLink>
           <NavLink
             className={(navData) =>
               navData.isActive
-                ? "text-primary-color gap-4 cursor-pointer transition-all text-[16px] flex font-medium"
-                : "text-primary-text gap-4 cursor-pointer transition-all text-[16px] flex font-medium"
+                ? "text-primary-color gap-4 cursor-pointer hover:scale-105 transition-all text-[16px] flex font-medium"
+                : "text-primary-text gap-4 cursor-pointer hover:scale-105 transition-all text-[16px] flex font-medium"
             }
             to="/customers"
           >
-            <BsFillPeopleFill size="32" />
+            <BsFillPeopleFill className="w-[32px] h-[32px] sm:w-[24px] sm:h-[24px]" />
+            <p className="hidden sm:block">Customers</p>
           </NavLink>
           <NavLink
             className={(navData) =>
               navData.isActive
-                ? "text-primary-color gap-4 cursor-pointer transition-all text-[16px] flex font-medium"
-                : "text-primary-text gap-4 cursor-pointer transition-all text-[16px] flex font-medium"
+                ? "text-primary-color gap-4 cursor-pointer hover:scale-105 transition-all text-[16px] flex font-medium"
+                : "text-primary-text gap-4 cursor-pointer hover:scale-105 transition-all text-[16px] flex font-medium"
             }
             to="/products"
           >
-            <BsStickiesFill size="32" />
+            <BsStickiesFill className="w-[32px] h-[32px] sm:w-[24px] sm:h-[24px]" />
+            <p className="hidden sm:block">Product Control</p>
           </NavLink>
           <NavLink
             className={(navData) =>
               navData.isActive
-                ? "text-primary-color gap-4 cursor-pointer transition-all text-[16px] flex font-medium before:content-none"
-                : "text-primary-text gap-4 cursor-pointer transition-all text-[16px] flex font-medium"
+                ? "text-primary-color gap-4 cursor-pointer hover:scale-105 transition-all text-[16px] flex font-medium"
+                : "text-primary-text gap-4 cursor-pointer hover:scale-105 transition-all text-[16px] flex font-medium"
             }
             to="/product/1"
           >
-            <BsPlusCircle size="32" />
+            <BsPlusCircle className="w-[32px] h-[32px] sm:w-[24px] sm:h-[24px]" />
+            <p className="hidden sm:block">Add/Edit Product</p>
           </NavLink>
-          <Theme />
+          <button
+            className={
+              "text-[16px] gap-4 flex font-medium hover:scale-105 transition-all items-center text-primary-text"
+            }
+            onClick={() => {
+              setTheme(theme === "light" ? "dark" : "light");
+            }}
+          >
+            <BsBrightnessHigh className="w-[32px] h-[32px] sm:w-[24px] sm:h-[24px]" />
+            <p className="hidden sm:block">Toggle Theme</p>
+          </button>
         </ul>
-      </nav>
-    </>
+      </div>
+    </nav>
   );
 };
 
