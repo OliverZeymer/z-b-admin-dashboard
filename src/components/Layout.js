@@ -1,7 +1,6 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "./Navbar";
 import NotificationWidget from "./NotificationWidget";
-import Search from "./Search";
 const Layout = () => {
   return (
     <div className="sm:flex">
