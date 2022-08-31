@@ -1,4 +1,5 @@
 import List from "../components/List";
+import Search from "../components/Search";
 
 const Orders = () => {
   const list = {
@@ -6,6 +7,7 @@ const Orders = () => {
   };
   return (
     <div>
+      <Search placeholder="Enter Order ID, Date, Customer" />
       <List data={list} type="orders" />
     </div>
   );

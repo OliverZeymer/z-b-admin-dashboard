@@ -1,10 +1,5 @@
-import {
-  BsGift,
-  BsTruck,
-  BsPrinter,
-  BsTrash,
-  BsPencilSquare,
-} from "react-icons/bs";
+import { BsTruck, BsPrinter, BsTrash, BsPencilSquare } from "react-icons/bs";
+import { GoPackage } from "react-icons/go";
 import useDynamicFetch from "../hooks/useDynamicFetch";
 const List = ({ data, type }) => {
   const { fetchData, isLoading, error } = useDynamicFetch({
@@ -15,6 +10,7 @@ const List = ({ data, type }) => {
     <table className="w-full shadow bg-primary-theme text-primary-text rounded">
       <thead className="text-primary-text border-gray text-left">
         <tr>
+          <th></th>
           {data?.headings?.map((heading, index) => (
             <th key={index} className="px-6 py-3 text-left font-medium">
               {heading}
@@ -23,51 +19,98 @@ const List = ({ data, type }) => {
         </tr>
       </thead>
 
-      <tbody className="bg-primary-theme">
+      <tbody className="bg-primary-theme text-base">
         {error && error}
         {!isLoading ? (
           fetchData?.map((item, index) => (
             <tr key={index}>
-              <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+              <td className="pl-6 whitespace-no-wrap border-b border-gray-200">
                 <input
-                  className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+                  className="outline-none border-none h-4 w-4 "
                   type="checkbox"
                 />
               </td>
               <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                <p className="cursor-pointer text-primary-color">{item.id}</p>
+              </td>
+              <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <div className="text-sm leading-5 ">
-                  <p>{item.orderDate}</p>
+                  {type === "customers" || "products" ? item.name : ""}
+                  {type === "orders" && item.orderDate}
                 </div>
               </td>
               <td className="px-2 py-4 whitespace-no-wrap border-b border-gray-200">
                 <div className="flex items-center">
                   <div className="ml-4">
                     <div className="text-sm leading-5 font-medium">
-                      <p>{item.customerName}</p>
+                      <p>
+                        {type === "orders" && item.customerName}
+                        {type === "customers" && item.phone}
+                        {type === "products" && item.price}
+                      </p>
                     </div>
                   </div>
                 </div>
               </td>
               <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <div className="text-sm leading-5 ">
-                  <p>{parseFloat(item.subTotal).toFixed(2)}$</p>
+                  <p>
+                    {type === "orders" &&
+                      parseFloat(item.subTotal).toFixed(2) + "$"}
+                    {type === "customers" && item.orderAmount}
+                    {type === "products" && item.stock}
+                  </p>
                 </div>
               </td>
               <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <span className="px-2 inline-flex leading-5 font-semibold rounded-full">
-                  {item.parcelStatus === false ? (
-                    <BsGift size="24" color="#FF0000" />
-                  ) : (
-                    <BsGift size="24" color="#00ED00" />
-                  )}
-                </span>
-                <span className=" inline-flex leading-5 font-semibold rounded-full">
-                  {item.shippingStatus === false ? (
-                    <BsTruck size="24" color="#FF0000" />
-                  ) : (
-                    <BsTruck size="24" color="#00ED00" />
-                  )}
-                </span>
+                {type === "orders" && (
+                  <>
+                    <span className="px-2 inline-flex leading-5 font-semibold rounded-full">
+                      {item.parcelStatus === false ? (
+                        <GoPackage
+                          size="24"
+                          color="#FF0000"
+                          title="Not packaged"
+                        />
+                      ) : (
+                        <GoPackage size="24" color="#00ED00" title="Packaged" />
+                      )}
+                    </span>
+                    <span className=" inline-flex leading-5 font-semibold rounded-full">
+                      {item.shippingStatus === false ? (
+                        <BsTruck
+                          size="24"
+                          color="#FF0000"
+                          title="Not Shipped"
+                        />
+                      ) : (
+                        <BsTruck
+                          size="24"
+                          color="#00ED00"
+                          title="Shipped Successfully"
+                        />
+                      )}
+                    </span>
+                  </>
+                )}
+                {type === "customers" && (
+                  <p
+                    className="text-ellipsis whitespace-nowrap overflow-hidden w-[250px]"
+                    title={
+                      item.address.address +
+                      ", " +
+                      item.address.city +
+                      ", " +
+                      item.address.postalCode +
+                      ", " +
+                      item.address.country
+                    }
+                  >
+                    {item.address.address}, {item.address.city},{" "}
+                    {item.address.postalCode}, {item.address.country}
+                  </p>
+                )}
+                {type === "products" && <p>{item.sold}</p>}
               </td>
               <td className="px-6 py-4 whitespace-no-wrap border-b text-right border-gray-200">
                 <span className="pr-2 inline-flex leading-5 font-semibold rounded-full">
