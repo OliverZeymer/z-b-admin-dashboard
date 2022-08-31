@@ -14,7 +14,43 @@ const NotificationWidget = () => {
     setNotification((prevState) => prevState.filter((item) => item.id !== id))
   }
 
-  useDynamicFetch("https://admin-dashboard-be.herokuapp.com/orders")
+  useDynamicFetch({
+    params: "/orders",
+    method: "POST",
+    data: {
+      parcelStatus: false,
+      shippingStatus: false,
+      orderDate: "2018-01-01",
+      subTotal: 1350,
+      customerName: "Benjamin Zeymer",
+      shippingAddress: {
+        address: "Eligötenstreet 11",
+        postalCode: "20354",
+        city: "Roskilde",
+        country: "Denmark",
+      },
+      billingAddress: {
+        address: "Eligötenstreet 11",
+        postalCode: "20354",
+        city: "Roskilde",
+        country: "Denmark",
+      },
+      boughtProducts: [
+        {
+          productId: "#AHGA68",
+          productName: "Apple Airpods Pro Max",
+          price: 100,
+          quantity: 1,
+        },
+        {
+          productId: "#AHGA69",
+          productName: "MacBook Pro Air Let",
+          price: 1250,
+          quantity: 1,
+        },
+      ],
+    },
+  })
 
   return (
     <ul className="absolute right-2 top-5 flex flex-col gap-3">
