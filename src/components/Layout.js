@@ -7,7 +7,7 @@ const Layout = () => {
       <Navbar />
       <NotificationWidget />
       <div className="mx-auto w-[90%] relative">
-        <main>
+        <main className="w-[90%] mx-auto">
           <Outlet />
         </main>
       </div>

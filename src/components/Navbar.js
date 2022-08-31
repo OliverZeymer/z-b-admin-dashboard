@@ -19,7 +19,7 @@ const Navbar = () => {
         <h1 className="hidden sm:block text-primary-color text-3xl font-semibold">
           Eligöten.
         </h1>
-        <ul className="flex justify-between sm:gap-12 sm:flex-col sm:mt-24">
+        <ul className="flex justify-between sm:gap-12 sm:flex-col sm:mt-24 h-full">
           <NavLink
             className={(navData) =>
               navData.isActive
@@ -66,7 +66,7 @@ const Navbar = () => {
           </NavLink>
           <button
             className={
-              "text-[16px] gap-4 flex font-medium hover:scale-105 transition-all items-center text-primary-text"
+              "text-[16px] gap-4 flex font-medium hover:scale-105 transition-all items-center text-primary-text mt-auto"
             }
             onClick={() => {
               setTheme(theme === "light" ? "dark" : "light");
