@@ -9,7 +9,7 @@ const Layout = () => {
       <NotificationWidget />
       <div className="mx-auto w-[90%] relative">
         <main>
-          <Search />
+          <Search placeholder="Enter Customer ID, Date, Customer" />
           <Outlet />
         </main>
       </div>

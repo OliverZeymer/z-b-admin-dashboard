@@ -8,8 +8,10 @@
   --primary-text: #000000;
   --primary-background: #f8f8f8;
   --primary-theme: #ffffff;
+  --primary-input: #ffffff;
 
   --darkmode-color: #6320ee;
+  --darkmode-input: #e1e2ef;
   --darkmode-text: #e1e2ef;
   --darkmode-background: #6320ee;
   --darkmode-theme: #000000;
