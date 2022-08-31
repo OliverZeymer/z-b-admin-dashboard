@@ -1,16 +1,15 @@
-import { motion, AnimatePresence } from "framer-motion";
-import { useContext } from "react";
-import notificationContext from "../contexts/notificationContext";
-import useAddNotification from "../functions/useAddNotification";
-import { IoCheckmarkCircleOutline } from "react-icons/io5";
-import { AiOutlineClose } from "react-icons/ai";
+import { motion, AnimatePresence } from "framer-motion"
+import { useContext } from "react"
+import notificationContext from "../contexts/notificationContext"
+import { IoCheckmarkCircleOutline } from "react-icons/io5"
+import { AiOutlineClose } from "react-icons/ai"
 
 const NotificationWidget = () => {
-  const { notification, setNotification } = useContext(notificationContext);
+  const { notification, setNotification } = useContext(notificationContext)
 
   function delNotification(id) {
     // Returns all notifications except the one with the id
-    setNotification((prevState) => prevState.filter((item) => item.id !== id));
+    setNotification((prevState) => prevState.filter((item) => item.id !== id))
   }
 
   return (
@@ -18,12 +17,12 @@ const NotificationWidget = () => {
       <AnimatePresence>
         {notification.map((notification) => {
           const { id, text, icon, removeDelay, bgColor, txtColor } =
-            notification;
+            notification
 
           // Removing notification after set time
           setTimeout(() => {
-            delNotification(id);
-          }, removeDelay);
+            delNotification(id)
+          }, removeDelay)
 
           return (
             <motion.li
@@ -42,11 +41,11 @@ const NotificationWidget = () => {
                 className="absolute right-0 top-0 cursor-pointer p-3 box-content"
               />
             </motion.li>
-          );
+          )
         })}
       </AnimatePresence>
     </ul>
-  );
-};
+  )
+}
 
-export default NotificationWidget;
+export default NotificationWidget

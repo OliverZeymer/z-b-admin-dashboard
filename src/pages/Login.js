@@ -30,7 +30,7 @@ const Login = () => {
 
   const onSubmitHandler = (data) => {
     // Post userdata to server
-    fetch("https://admin-dashboard-be.herokuapp.com/auth", {
+    fetch(`${process.env.REACT_APP_API_URL}/auth`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
