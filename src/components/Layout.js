@@ -8,7 +8,7 @@ const Layout = () => {
       <Navbar />
       <NotificationWidget />
       <div className="mx-auto w-[90%] relative">
-        <main>
+        <main className="w-[95%] mx-auto">
           <Search placeholder="Enter Customer ID, Date, Customer" />
           <Outlet />
         </main>

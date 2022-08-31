@@ -1,5 +1,14 @@
+import List from "../components/List";
+
 const Orders = () => {
-  return <div></div>;
+  const list = {
+    headings: ["Order ID", "Date", "Customer", "Payable Amount", "Status"],
+  };
+  return (
+    <div>
+      <List data={list} />
+    </div>
+  );
 };
 
 export default Orders;

@@ -8,10 +8,6 @@ import { AiOutlineClose } from "react-icons/ai";
 const NotificationWidget = () => {
   const { notification, setNotification } = useContext(notificationContext);
 
-  useAddNotification({
-    text: "stor numse lige i ansigt",
-  });
-
   function delNotification(id) {
     // Returns all notifications except the one with the id
     setNotification((prevState) => prevState.filter((item) => item.id !== id));
