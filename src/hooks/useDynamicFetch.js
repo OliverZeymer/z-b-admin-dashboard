@@ -36,7 +36,7 @@ export default function useDynamicFetch({ params, method, data }) {
         }
       })()
     },
-    [params, token]
+    [params, token, data, method]
   )
 
   return { fetchData, isLoading, error }

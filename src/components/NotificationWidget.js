@@ -4,8 +4,6 @@ import notificationContext from "../contexts/notificationContext"
 import { IoCheckmarkCircleOutline } from "react-icons/io5"
 import { AiOutlineClose } from "react-icons/ai"
 
-import useDynamicFetch from "../hooks/useDynamicFetch"
-
 const NotificationWidget = () => {
   const { notification, setNotification } = useContext(notificationContext)
 
