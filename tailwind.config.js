@@ -10,6 +10,8 @@ module.exports = {
           background: "var(--primary-background)",
           text: "var(--primary-text)",
           theme: "var(--primary-theme)",
+          input: "var(--primary-input)",
+          placeholder: "rgba(19, 19, 19, 0.8)",
         },
       },
       fontFamily: {

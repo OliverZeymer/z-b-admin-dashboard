@@ -2,7 +2,8 @@ export function setColors(
   newPrimaryColor,
   newTextColor,
   newBackgroundColor,
-  newThemeColor
+  newThemeColor,
+  newInputColor
 ) {
   document.documentElement.style.setProperty(
     "--primary-color",
@@ -13,8 +14,6 @@ export function setColors(
     "--primary-background",
     newBackgroundColor
   );
-  document.documentElement.style.setProperty(
-    "--primary-theme",
-    newThemeColor
-  );
+  document.documentElement.style.setProperty("--primary-theme", newThemeColor);
+  document.documentElement.style.setProperty("--primary-input", newInputColor);
 }

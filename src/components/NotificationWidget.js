@@ -1,5 +1,3 @@
-/** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useContext } from "react";
 import notificationContext from "../contexts/notificationContext";
