@@ -52,7 +52,7 @@ const List = ({ data, type }) => {
                   </td>
                   <td className="px-6 py-3 whitespace-no-wrap sm:border-b border-gray-200">
                     <div className="text-sm leading-5 ">
-                      <p className="whitespace-nowrap overflow-hidden text-ellipsis w-24">
+                      <p className="whitespace-nowrap overflow-hidden text-ellipsis w-36">
                         {type === "customers" || "products" ? item.name : ""}
                         {type === "orders" && item.orderDate}
                       </p>
@@ -60,7 +60,7 @@ const List = ({ data, type }) => {
                   </td>
                   <td className="px-6 py-3 whitespace-no-wrap sm:border-b border-gray-200">
                     {type === "products" && <p>{item.price} $</p>}
-                    {type === "customers" && <p className="whitespace-nowrap overflow-hidden text-ellipsis w-24">{item.phone}</p>}
+                    {type === "customers" && <p className="whitespace-nowrap overflow-hidden text-ellipsis w-36">{item.phone}</p>}
                     {type === "orders" && (
                       <div className="block sm:flex items-center">
                         <div className="text-sm leading-5 font-medium">
