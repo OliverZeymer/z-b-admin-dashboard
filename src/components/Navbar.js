@@ -4,15 +4,15 @@ import {
   BsFillPeopleFill,
   BsPlusCircle,
   BsBrightnessHigh,
-} from "react-icons/bs";
-import { NavLink } from "react-router-dom";
-import { useContext } from "react";
-import themeContext from "../contexts/themeContext";
-import { setToLS } from "../functions/setToLS";
+} from "react-icons/bs"
+import { NavLink } from "react-router-dom"
+import { useContext } from "react"
+import themeContext from "../contexts/themeContext"
+import { setToLS } from "../functions/setToLS"
 
 const Navbar = () => {
-  const { theme, setTheme } = useContext(themeContext);
-  setToLS("theme", theme);
+  const { theme, setTheme } = useContext(themeContext)
+  setToLS("theme", theme)
   return (
     <nav className="flex fixed sm:static sm:block bottom-0 w-screen sm:w-[260px] sm:h-screen bg-primary-theme">
       <div className="wrapper w-10/12 sm:w-4/5 mx-auto py-4 sm:py-8">
@@ -59,17 +59,17 @@ const Navbar = () => {
                 ? "text-primary-color gap-4 cursor-pointer hover:scale-105 transition-all text-[16px] flex font-medium"
                 : "text-primary-text gap-4 cursor-pointer hover:scale-105 transition-all text-[16px] flex font-medium"
             }
-            to="/product/1"
+            to="/product/add"
           >
             <BsPlusCircle className="w-[32px] h-[32px] sm:w-[24px] sm:h-[24px]" />
-            <p className="hidden sm:block">Add/Edit Product</p>
+            <p className="hidden sm:block">Add Product</p>
           </NavLink>
           <button
             className={
               "text-[16px] gap-4 flex font-medium hover:scale-105 transition-all items-center text-primary-text mt-auto"
             }
             onClick={() => {
-              setTheme(theme === "light" ? "dark" : "light");
+              setTheme(theme === "light" ? "dark" : "light")
             }}
           >
             <BsBrightnessHigh className="w-[32px] h-[32px] sm:w-[24px] sm:h-[24px]" />
@@ -78,7 +78,7 @@ const Navbar = () => {
         </ul>
       </div>
     </nav>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar

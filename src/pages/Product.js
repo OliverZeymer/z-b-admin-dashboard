@@ -1,25 +1,124 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react"
-import { Reorder } from "framer-motion"
-import { useState } from "react"
+import { Reorder, useForceUpdate } from "framer-motion"
+import { useEffect, useState, useContext } from "react"
+import { useParams } from "react-router-dom"
 import { BsPlusCircle } from "react-icons/bs"
+import useDynamicFetch from "../hooks/useDynamicFetch"
+import addNotification from "../functions/addNotification"
+import notificationContext from "../contexts/notificationContext"
 
 const Product = () => {
   const style = css`
     grid-template-columns: 1fr 2fr 1fr;
   `
 
-  const [imageList, setImageList] = useState([
-    "https://picsum.photos/200",
-    "https://picsum.photos/201",
-    "https://picsum.photos/202",
-    "https://picsum.photos/203",
-  ])
+  // Importing notification context to send to addNotification function
+  const { setNotification } = useContext(notificationContext)
+
+  // Handles all productDataFields
+  const [productDataFields, setProductDataFields] = useState({
+    id: "",
+    name: "",
+    description: "",
+    price: 0,
+    weight: 0,
+    stock: 0,
+    images: [
+      "https://picsum.photos/200",
+      "https://picsum.photos/200",
+      "https://picsum.photos/200",
+      "https://picsum.photos/200",
+    ],
+  })
+
+  // Handles the heading
+  const [heading, setHeading] = useState(
+    "Editing product - Apple airdots (#AH123)"
+  )
+
+  // Importing useParams to get the id from the url
+  // If id is "add", then we will render the form to add a new product
+  const { id: param } = useParams()
+
+  const [params, setParams] = useState(null)
+  const [method, setMethod] = useState(null)
+  const [data, setData] = useState(null)
+
+  useEffect(() => {
+    if (param === "add") {
+      setHeading("Now adding new product...")
+    } else {
+      setHeading("Loading product...")
+      setParams(`/products/${param}`)
+      setMethod("GET")
+    }
+  }, [])
+
+  // product ID: qw78ge
+  const { fetchData, isLoading, error } = useDynamicFetch({
+    params: params,
+    method: method,
+    data: data,
+  })
+
+  useEffect(() => {
+    if (method === "GET") {
+      setHeading(`Editing product - ${fetchData.name} (${fetchData.id})`)
+      setProductDataFields((prevState) => {
+        return {
+          ...prevState,
+          id: fetchData.id,
+          name: fetchData.name,
+          description: fetchData.description,
+          price: fetchData.price,
+          weight: fetchData.weightInGrams,
+          stock: fetchData.stock,
+          images: fetchData.images,
+        }
+      })
+    } else if (method === "POST") {
+      setData(productDataFields)
+      console.log(fetchData)
+    }
+  }, [fetchData])
+
+  // For controling the imageArray with framer reOrder
+  const [imageArray, setImageArray] = useState(["https://picsum.photos/200"])
+  // For updating in productDataFields when images change
+  useEffect(() => {
+    setProductDataFields((prevState) => ({ ...prevState, images: imageArray }))
+  }, [imageArray])
+
+  // Handles change for productDataFields and replacing in object
+  function handleChange(event) {
+    const { name, value, type, checked } = event.target
+    setProductDataFields((prevState) => {
+      return {
+        ...prevState,
+        [name]: type === "checkbox" ? checked : value,
+      }
+    })
+  }
+
+  // On form submit, we will send the productDataFields to the server
+  function handleSubmit(event) {
+    event.preventDefault()
+    if (param === "add") {
+      setParams("/products")
+      setMethod("POST")
+      addNotification({
+        text: "Product edit saved succesfully!",
+        setNotification,
+      })
+      console.log("submit nu")
+    }
+  }
 
   return (
-    <section>
+    <form className="flex flex-col relative">
       <h2 className="mt-[140px] mb-9 text-2xl font-medium text-primary-text">
-        Editing product - Apple airdots (#AH123)
+        {heading}
       </h2>
       <div css={style} className="grid gap-[1.5vw]">
         <div className="h-300 w-300">
@@ -37,18 +136,24 @@ const Product = () => {
             <input
               className="p-2 border w-full border-[rgba(19,19,19,0.25)] outline-none rounded-[3px] font-light focus:border-primary-placeholder placeholder:text-primary-placeholder bg-primary-input text-primary-placeholder"
               type="text"
+              name="name"
               id="name"
+              autoComplete="off"
+              onChange={handleChange}
+              value={productDataFields.name}
             />
           </div>
           <div>
             <label htmlFor="description" className="text-primary-text mb-6">
               Description
             </label>
-            <div
-              contentEditable
+            <textarea
               className="p-2 h-[176px] overflow-auto border w-full border-[rgba(19,19,19,0.25)] outline-none rounded-[3px] font-light focus:border-primary-placeholder placeholder:text-primary-placeholder bg-primary-input text-primary-placeholder"
               type="text"
               id="description"
+              name="description"
+              onChange={handleChange}
+              value={productDataFields.description}
             />
           </div>
         </div>
@@ -59,8 +164,11 @@ const Product = () => {
             </label>
             <input
               className="p-2 border w-full border-[rgba(19,19,19,0.25)] outline-none rounded-[3px] font-light focus:border-primary-placeholder placeholder:text-primary-placeholder bg-primary-input text-primary-placeholder"
-              type="text"
+              type="number"
               id="price"
+              name="price"
+              onChange={handleChange}
+              value={productDataFields.price}
             />
           </div>
           <div>
@@ -69,8 +177,11 @@ const Product = () => {
             </label>
             <input
               className="p-2 border w-full border-[rgba(19,19,19,0.25)] outline-none rounded-[3px] font-light focus:border-primary-placeholder placeholder:text-primary-placeholder bg-primary-input text-primary-placeholder"
-              type="text"
+              type="number"
               id="weight"
+              name="weight"
+              onChange={handleChange}
+              value={productDataFields.weight}
             />
           </div>
           <div>
@@ -79,8 +190,11 @@ const Product = () => {
             </label>
             <input
               className="p-2 border w-full border-[rgba(19,19,19,0.25)] outline-none rounded-[3px] font-light focus:border-primary-placeholder placeholder:text-primary-placeholder bg-primary-input text-primary-placeholder"
-              type="text"
+              type="number"
               id="stock"
+              name="stock"
+              onChange={handleChange}
+              value={productDataFields.stock}
             />
           </div>
         </div>
@@ -97,10 +211,10 @@ const Product = () => {
         <Reorder.Group
           className="flex justify-between gap-5 mt-5"
           axis="x"
-          values={imageList}
-          onReorder={setImageList}
+          values={imageArray}
+          onReorder={setImageArray}
         >
-          {imageList.map((image) => (
+          {imageArray.map((image) => (
             <Reorder.Item key={image} value={image}>
               <div className="max-h-50 max-w-50 shadow-lg cursor-grab">
                 <img
@@ -113,7 +227,10 @@ const Product = () => {
           ))}
         </Reorder.Group>
       </div>
-    </section>
+      <button className="absolute right-0 bottom-0" onClick={handleSubmit}>
+        Submit
+      </button>
+    </form>
   )
 }
 
