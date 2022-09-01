@@ -13,7 +13,7 @@ import { useState } from "react"
 import themeContext from "./contexts/themeContext"
 import { setColors } from "./functions/setColors"
 function App() {
-  const [token, setToken] = useState("sfdcnhlisgnchg")
+  const [token, setToken] = useState(null) //TOKEN sfdcnhlisgnchg
 
   /*-------------THEME LOCAL STORAGE---------- */
   const themeLS = JSON.parse(window.localStorage.getItem("theme"))

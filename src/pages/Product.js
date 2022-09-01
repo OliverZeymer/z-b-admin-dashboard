@@ -2,9 +2,11 @@
 import { css } from "@emotion/react"
 import { Reorder, useForceUpdate } from "framer-motion"
 import { useEffect, useState, useContext } from "react"
+import { useNavigate } from "react-router-dom"
 import { useParams } from "react-router-dom"
 import { BsPlusCircle } from "react-icons/bs"
 import useDynamicFetch from "../hooks/useDynamicFetch"
+import { motion } from "framer-motion"
 import addNotification from "../functions/addNotification"
 import notificationContext from "../contexts/notificationContext"
 
@@ -32,6 +34,8 @@ const Product = () => {
     ],
   })
 
+  const [showBtn, setShowBtn] = useState(false)
+
   // Handles the heading
   const [heading, setHeading] = useState(
     "Editing product - Apple airdots (#AH123)"
@@ -41,6 +45,20 @@ const Product = () => {
   // If id is "add", then we will render the form to add a new product
   const { id: param } = useParams()
 
+  // FOR TESTING
+  const {
+    fetchData: isData,
+    isLoading: atLoading,
+    error: whatError,
+  } = useDynamicFetch({
+    params: "/products",
+    method: "GET",
+    data: null,
+  })
+  useEffect(() => {
+    console.log(isData)
+  }, [isData])
+
   const [params, setParams] = useState(null)
   const [method, setMethod] = useState(null)
   const [data, setData] = useState(null)
@@ -48,6 +66,7 @@ const Product = () => {
   useEffect(() => {
     if (param === "add") {
       setHeading("Now adding new product...")
+      setMethod("POST")
     } else {
       setHeading("Loading product...")
       setParams(`/products/${param}`)
@@ -61,6 +80,8 @@ const Product = () => {
     method: method,
     data: data,
   })
+
+  let navigate = useNavigate()
 
   useEffect(() => {
     if (method === "GET") {
@@ -79,7 +100,17 @@ const Product = () => {
       })
     } else if (method === "POST") {
       setData(productDataFields)
-      console.log(fetchData)
+      addNotification({
+        text: "Product added saved succesfully!",
+        setNotification,
+      })
+      setHeading(`Editing product - ${fetchData.name} (${fetchData.id})`)
+      // Somewhere in your code, e.g. inside a handler:
+      navigate(`/product/${fetchData.id}`)
+      setTimeout(() => {
+        setParams(null)
+        setMethod(null)
+      }, 500)
     }
   }, [fetchData])
 
@@ -92,6 +123,7 @@ const Product = () => {
 
   // Handles change for productDataFields and replacing in object
   function handleChange(event) {
+    setShowBtn(true)
     const { name, value, type, checked } = event.target
     setProductDataFields((prevState) => {
       return {
@@ -107,16 +139,12 @@ const Product = () => {
     if (param === "add") {
       setParams("/products")
       setMethod("POST")
-      addNotification({
-        text: "Product edit saved succesfully!",
-        setNotification,
-      })
       console.log("submit nu")
     }
   }
 
   return (
-    <form className="flex flex-col relative">
+    <form onSubmit={handleSubmit} className="flex flex-col relative">
       <h2 className="mt-[140px] mb-9 text-2xl font-medium text-primary-text">
         {heading}
       </h2>
@@ -227,9 +255,21 @@ const Product = () => {
           ))}
         </Reorder.Group>
       </div>
-      <button className="absolute right-0 bottom-0" onClick={handleSubmit}>
-        Submit
-      </button>
+      {showBtn && (
+        <motion.button
+          whileHover={{
+            scale: 1.05,
+            transition: { duration: 0.1 },
+          }}
+          whileTap={{ scale: 0.95 }}
+          type="submit"
+          aria-label="submit form button"
+          spellCheck="false"
+          className="absolute right-0 bottom-0 bg-primary-color text-white px-10 py-6 font-semibold tracking-wider mt-5 focus:bg-primary-background focus:text-primary-color hover:bg-primary-background hover:text-primary-color border-2 border-primary-color transition-colors outline-none"
+        >
+          SUBMIT CHANGES
+        </motion.button>
+      )}
     </form>
   )
 }
