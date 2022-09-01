@@ -5,7 +5,7 @@ import {
   BsPlusCircle,
   BsBrightnessHigh,
 } from "react-icons/bs"
-import { NavLink } from "react-router-dom"
+import { NavLink, useNavigate, Link } from "react-router-dom"
 import { useContext } from "react"
 import themeContext from "../contexts/themeContext"
 import { setToLS } from "../functions/setToLS"
@@ -17,9 +17,11 @@ const Navbar = () => {
     <nav className="z-40 flex fixed sm:static sm:block bottom-0 w-screen sm:w-[260px] sm:h-screen bg-primary-theme">
       <div className="wrapper h-full w-10/12 sm:w-4/5 mx-auto py-4 sm:py-8">
         <ul className="flex justify-between sm:gap-12 sm:flex-col sm:h-full">
-          <h1 className="hidden sm:block text-primary-color text-3xl font-semibold mb-12">
-            Eligöten.
-          </h1>
+          <Link to="/orders">
+            <h1 className="hidden sm:block text-primary-color text-3xl font-semibold mb-12">
+              Eligöten.
+            </h1>
+          </Link>
           <NavLink
             className={(navData) =>
               navData.isActive

@@ -115,7 +115,10 @@ const Product = () => {
   }, [fetchData])
 
   // For controling the imageArray with framer reOrder
-  const [imageArray, setImageArray] = useState(["https://picsum.photos/200"])
+  const [imageArray, setImageArray] = useState([
+    "https://picsum.photos/200",
+    "https://picsum.photos/201",
+  ])
   // For updating in productDataFields when images change
   useEffect(() => {
     setProductDataFields((prevState) => ({ ...prevState, images: imageArray }))
@@ -228,7 +231,7 @@ const Product = () => {
         </div>
       </div>
       <p className="text-primary-text mb-1 mt-8">Image control</p>
-      <div className="p-5 max-w-[65%] border w-full border-[rgba(19,19,19,0.25)] outline-none rounded-[3px] font-light focus:border-primary-placeholder placeholder:text-primary-placeholder bg-primary-input text-primary-placeholder">
+      <div className="p-5 max-w-fit border w-full border-[rgba(19,19,19,0.25)] outline-none rounded-[3px] font-light focus:border-primary-placeholder placeholder:text-primary-placeholder bg-primary-input text-primary-placeholder">
         <div className="flex justify-between">
           <p>Images (4) - drag to change index</p>
           <p className="flex items-center gap-2 cursor-pointer">
@@ -237,7 +240,7 @@ const Product = () => {
           </p>
         </div>
         <Reorder.Group
-          className="flex justify-between gap-5 mt-5"
+          className="flex gap-5 mt-5"
           axis="x"
           values={imageArray}
           onReorder={setImageArray}
