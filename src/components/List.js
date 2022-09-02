@@ -14,7 +14,7 @@ const List = ({ data, type }) => {
   const { search, setSearch } = useContext(searchContext);
   useEffect(() => {
     setSearch("");
-  }, [location]);
+  }, [location, setSearch]);
   window.addEventListener("resize", (event) => {
     if (event.target.innerWidth <= 640) {
       setMobile(true);

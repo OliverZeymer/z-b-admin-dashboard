@@ -1,32 +1,26 @@
 /** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react"
-import { Reorder, useForceUpdate } from "framer-motion"
-import { useEffect, useState, useContext } from "react"
-import { useNavigate } from "react-router-dom"
-import { useParams } from "react-router-dom"
-import { BsPlusCircle } from "react-icons/bs"
-import useDynamicFetch from "../hooks/useDynamicFetch"
-import { motion } from "framer-motion"
-import addNotification from "../functions/addNotification"
-import notificationContext from "../contexts/notificationContext"
+import { css } from "@emotion/react";
+import { Reorder, useForceUpdate } from "framer-motion";
+import { useEffect, useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { BsPlusCircle } from "react-icons/bs";
+import useDynamicFetch from "../hooks/useDynamicFetch";
+import { motion } from "framer-motion";
+import addNotification from "../functions/addNotification";
+import notificationContext from "../contexts/notificationContext";
 
 const ProductNew = () => {
   const style = css`
     grid-template-columns: 1fr 2fr 1fr;
-  `
+  `;
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col relative">
-      <h2 className="mt-[140px] mb-9 text-2xl font-medium text-primary-text">
-        {heading}
-      </h2>
+      <h2 className="mt-[140px] mb-9 text-2xl font-medium text-primary-text">{heading}</h2>
       <div css={style} className="grid gap-[1.5vw]">
         <div className="h-300 w-300">
-          <img
-            className="w-full h-full"
-            src="https://picsum.photos/200"
-            alt="Airdots"
-          />
+          <img className="w-full h-full" src="https://picsum.photos/200" alt="Airdots" />
         </div>
         <div className="flex flex-col justify-between">
           <div>
@@ -108,20 +102,11 @@ const ProductNew = () => {
             <BsPlusCircle size="20px" />
           </p>
         </div>
-        <Reorder.Group
-          className="flex gap-5 mt-5"
-          axis="x"
-          values={imageArray}
-          onReorder={setImageArray}
-        >
+        <Reorder.Group className="flex gap-5 mt-5" axis="x" values={imageArray} onReorder={setImageArray}>
           {imageArray.map((image) => (
             <Reorder.Item key={image} value={image}>
               <div className="max-h-50 max-w-50 shadow-lg cursor-grab">
-                <img
-                  className="pointer-events-none"
-                  src={image}
-                  alt="Airdots"
-                />
+                <img className="pointer-events-none" src={image} alt="Airdots" />
               </div>
             </Reorder.Item>
           ))}
@@ -141,7 +126,7 @@ const ProductNew = () => {
         SUBMIT CHANGES
       </motion.button>
     </form>
-  )
-}
+  );
+};
 
-export default ProductNew
+export default ProductNew;

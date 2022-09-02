@@ -1,3 +1,4 @@
+/* eslint-disable */
 export function getFilteredItems(search, fetchData, isLoading) {
   if (!isLoading) {
     if (search) {
@@ -21,5 +22,7 @@ export function getFilteredItems(search, fetchData, isLoading) {
     } else {
       return fetchData;
     }
+  } else {
+    return;
   }
 }
