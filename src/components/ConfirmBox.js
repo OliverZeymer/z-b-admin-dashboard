@@ -25,13 +25,16 @@ const ConfirmBox = ({ type }) => {
   const { token } = useContext(tokenContext);
   const { popup, setPopup } = useContext(confirmPopupContext);
   const deleteItem = async (id) => {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/${type}/${id}`, {
-      method: "DELETE",
-      headers: {
-        authorization: "Bearer " + token,
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}/${type}/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          authorization: "Bearer " + token,
+          "Content-Type": "application/json",
+        },
+      }
+    );
   };
   /* eslint-disable */
   const escapeDown = useCallback((event) => {
@@ -46,13 +49,13 @@ const ConfirmBox = ({ type }) => {
     };
   }, []);
   /* eslint-enable */
-  function handleYes(event) {
+  function handleYes() {
     deleteItem(popup[1]);
     setPopup(false);
+    document.querySelector(`#${popup[1]}`).remove();
   }
-  function handleNo(event) {
+  function handleNo() {
     setPopup(false);
-    console.log(event.target);
   }
 
   return (
@@ -77,12 +80,14 @@ const ConfirmBox = ({ type }) => {
             transition={{ duration: 0.6 }}
             className="relative transition-transform-500 flex flex-col justify-between bg-primary-background shadow-2xl rounded-3xl p-16"
           >
-            <h1 className="text-3xl text-primary-text">Are you sure you wanna do that?</h1>
+            <h1 className="text-3xl text-primary-text">
+              Are you sure you wanna delete this {type.slice(0, -1)}?
+            </h1>
 
             <div className="flex justify-evenly mt-8">
               <motion.button
-                onClick={(event) => {
-                  handleYes(event);
+                onClick={() => {
+                  handleYes();
                 }}
                 whileHover={{
                   scale: 1.05,
@@ -113,7 +118,10 @@ const ConfirmBox = ({ type }) => {
               }}
               className="button p-1 border-none text-3xl absolute top-1 right-3 bg-transparent text-red-500 hover:text-red-900 rounded-full"
             >
-              <RiCloseCircleLine color="red" className="hover:scale-125 duration-300" />
+              <RiCloseCircleLine
+                color="red"
+                className="hover:scale-125 duration-300"
+              />
             </button>
           </motion.section>
         </motion.div>

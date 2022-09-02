@@ -18,11 +18,11 @@ function App() {
   const [token, setToken] = useState("sfdcnhlisgnchg");
   const [notification, setNotification] = useState([]);
   const [search, setSearch] = useState("");
+  const [popup, setPopup] = useState(false);
   /*-------------THEME LOCAL STORAGE---------- */
   const themeLS = JSON.parse(window.localStorage.getItem("theme"));
   const [savedTheme] = useState(themeLS);
   const [theme, setTheme] = useState(savedTheme || "light");
-  const [popup, setPopup] = useState(false);
 
   setColors(
     theme === "dark" ? "var(--darkmode-color)" : "",
