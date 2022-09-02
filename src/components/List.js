@@ -17,23 +17,23 @@ const List = ({ data, type }) => {
   }, [location]);
   window.addEventListener("resize", (event) => {
     if (event.target.innerWidth <= 640) {
-      setMobile(true)
+      setMobile(true);
     } else {
-      setMobile(false)
+      setMobile(false);
     }
-  })
+  });
   useEffect(() => {
     if (window.innerWidth <= 640) {
-      setMobile(true)
+      setMobile(true);
     } else {
-      setMobile(false)
+      setMobile(false);
     }
-  }, [])
+  }, []);
 
   const { fetchData, isLoading, error } = useDynamicFetch({
     params: `/${type}`,
     method: "GET",
-  })
+  });
 
   const filteredItems = getFilteredItems(search, fetchData, isLoading);
   console.log(filteredItems);
@@ -48,6 +48,7 @@ const List = ({ data, type }) => {
   const navigate = useNavigate();
   return (
     <>
+      <h2 className="text-4xl hidden sm:block capitalize text-primary-text mt-12">{type}</h2>
       <Search placeholder={placeholder} />
       {!mobile ? (
         <table className="mt-12 flex justify-center sm:table w-full shadow-xl sm:shadow bg-primary-theme text-primary-text rounded-xl sm:rounded">
@@ -55,7 +56,10 @@ const List = ({ data, type }) => {
             <tr>
               <th className="hidden sm:table"></th>
               {data?.headings?.map((heading, index) => (
-                <th key={index} className="px-6 py-3 text-left flex flex-col sm:table-cell font-medium">
+                <th
+                  key={index}
+                  className="px-6 py-3 text-left flex flex-col whitespace-nowrap overflow-hidden text-ellipsis sm:table-cell font-medium"
+                >
                   {heading}
                 </th>
               ))}
@@ -74,7 +78,7 @@ const List = ({ data, type }) => {
                     className="px-6 py-3 whitespace-no-wrap sm:border-b border-gray-200"
                     onClick={() => {
                       if (type === "products") {
-                        navigate(`/product/${item.id}`)
+                        navigate(`/product/${item.id}`);
                       }
                     }}
                   >
@@ -82,7 +86,7 @@ const List = ({ data, type }) => {
                   </td>
                   <td className="px-6 py-3 whitespace-no-wrap sm:border-b border-gray-200">
                     <div className="text-sm leading-5 ">
-                      <p className="whitespace-nowrap overflow-hidden text-ellipsis w-36">
+                      <p className="whitespace-nowrap overflow-hidden text-ellipsis">
                         {type === "customers" || "products" ? item.name : ""}
                         {type === "orders" && item.orderDate}
                       </p>
@@ -90,7 +94,7 @@ const List = ({ data, type }) => {
                   </td>
                   <td className="px-6 py-3 whitespace-no-wrap sm:border-b border-gray-200">
                     {type === "products" && <p>{item.price} $</p>}
-                    {type === "customers" && <p className="whitespace-nowrap overflow-hidden text-ellipsis w-36">{item.phone}</p>}
+                    {type === "customers" && <p className="whitespace-nowrap overflow-hidden text-ellipsis">{item.phone}</p>}
                     {type === "orders" && (
                       <div className="block sm:flex items-center">
                         <div className="text-sm leading-5 font-medium">
@@ -129,7 +133,7 @@ const List = ({ data, type }) => {
                     )}
                     {type === "customers" && (
                       <p
-                        className="text-ellipsis whitespace-nowrap overflow-hidden w-20 sm:w-[280px]"
+                        className="text-ellipsis whitespace-nowrap overflow-hidden w-20 sm:w-56"
                         title={item.address.address + ", " + item.address.city + ", " + item.address.postalCode + ", " + item.address.country}
                       >
                         {item.address.address}, {item.address.city}, {item.address.postalCode}, {item.address.country}
@@ -147,7 +151,7 @@ const List = ({ data, type }) => {
                         size="24"
                         onClick={() => {
                           if (type === "products") {
-                            navigate(`/product/${item.id}`)
+                            navigate(`/product/${item.id}`);
                           }
                         }}
                       />
@@ -267,7 +271,7 @@ const List = ({ data, type }) => {
         </div>
       )}
     </>
-  )
-}
+  );
+};
 
-export default List
+export default List;
