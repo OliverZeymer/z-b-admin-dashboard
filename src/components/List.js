@@ -8,8 +8,10 @@ import { useContext } from "react";
 import searchContext from "../contexts/searchContext";
 import { getFilteredItems } from "../functions/getFilteredItems";
 import Loader from "./Loader";
+import tokenContext from "../contexts/tokenContext";
 const List = ({ data, type }) => {
   let location = useLocation();
+  const { token } = useContext(tokenContext);
 
   const [mobile, setMobile] = useState();
   const { search, setSearch } = useContext(searchContext);
@@ -35,6 +37,16 @@ const List = ({ data, type }) => {
     params: `/${type}`,
     method: "GET",
   });
+
+  const deleteItem = async (id) => {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/${type}/${id}`, {
+      method: "DELETE",
+      headers: {
+        authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+    });
+  };
   const filteredItems = getFilteredItems(search, fetchData, isLoading);
   const placeholder =
     type === "orders"
@@ -45,6 +57,7 @@ const List = ({ data, type }) => {
       ? "Enter Product ID or Product Name"
       : "";
   const navigate = useNavigate();
+
   return (
     <>
       <h2 className="text-4xl hidden sm:block capitalize text-primary-text mt-12">{type}</h2>
@@ -157,7 +170,12 @@ const List = ({ data, type }) => {
                         />
                       </span>
                       <span className="pr-2 inline-flex leading-5 font-semibold rounded-full">
-                        <BsTrash size="24" />
+                        <BsTrash
+                          onClick={() => {
+                            deleteItem(item.id);
+                          }}
+                          size="24"
+                        />
                       </span>
                     </td>
                   </tr>
