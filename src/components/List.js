@@ -17,23 +17,23 @@ const List = ({ data, type }) => {
   }, [location]);
   window.addEventListener("resize", (event) => {
     if (event.target.innerWidth <= 640) {
-      setMobile(true);
+      setMobile(true)
     } else {
-      setMobile(false);
+      setMobile(false)
     }
-  });
+  })
   useEffect(() => {
     if (window.innerWidth <= 640) {
-      setMobile(true);
+      setMobile(true)
     } else {
-      setMobile(false);
+      setMobile(false)
     }
-  }, []);
+  }, [])
 
   const { fetchData, isLoading, error } = useDynamicFetch({
     params: `/${type}`,
     method: "GET",
-  });
+  })
 
   const filteredItems = getFilteredItems(search, fetchData, isLoading);
   console.log(filteredItems);
@@ -74,7 +74,7 @@ const List = ({ data, type }) => {
                     className="px-6 py-3 whitespace-no-wrap sm:border-b border-gray-200"
                     onClick={() => {
                       if (type === "products") {
-                        navigate(`/product/${item.id}`);
+                        navigate(`/product/${item.id}`)
                       }
                     }}
                   >
@@ -142,7 +142,15 @@ const List = ({ data, type }) => {
                       <BsPrinter size="24" />
                     </span>
                     <span className="pr-2 inline-flex leading-5 font-semibold rounded-full">
-                      <BsPencilSquare size="24" />
+                      <BsPencilSquare
+                        className="cursor-pointer"
+                        size="24"
+                        onClick={() => {
+                          if (type === "products") {
+                            navigate(`/product/${item.id}`)
+                          }
+                        }}
+                      />
                     </span>
                     <span className="pr-2 inline-flex leading-5 font-semibold rounded-full">
                       <BsTrash size="24" />
@@ -259,7 +267,7 @@ const List = ({ data, type }) => {
         </div>
       )}
     </>
-  );
-};
+  )
+}
 
-export default List;
+export default List

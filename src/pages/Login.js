@@ -89,7 +89,7 @@ const Login = () => {
                 setErrMsgFromServer(null)
               },
             })}
-            className={`bg-primary-background p-4 focus:outline-text-primary-color mt-2 ${
+            className={`bg-primary-input p-4 focus:outline-text-primary-color mt-2 ${
               errors.username && "shake"
             }`}
             type="text"
@@ -110,7 +110,7 @@ const Login = () => {
                 setErrMsgFromServer(null)
               },
             })}
-            className={`bg-primary-background p-4 focus:outline-text-primary-color mt-2 ${
+            className={`bg-primary-input p-4 focus:outline-text-primary-color mt-2 ${
               errors.password && "shake"
             }`}
             type="password"
