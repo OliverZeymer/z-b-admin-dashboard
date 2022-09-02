@@ -5,7 +5,7 @@ import Order from "./pages/Order"
 import Customers from "./pages/Customers"
 import Customer from "./pages/Customer"
 import Products from "./pages/Products"
-import Product from "./pages/Product"
+import ProductNew from "./pages/Product"
 import tokenContext from "./contexts/tokenContext"
 import notificationContext from "./contexts/notificationContext"
 import Layout from "./components/Layout"
@@ -13,7 +13,7 @@ import { useState } from "react"
 import themeContext from "./contexts/themeContext"
 import { setColors } from "./functions/setColors"
 function App() {
-  const [token, setToken] = useState(null) //TOKEN sfdcnhlisgnchg
+  const [token, setToken] = useState("sfdcnhlisgnchg") //TOKEN sfdcnhlisgnchg
 
   /*-------------THEME LOCAL STORAGE---------- */
   const themeLS = JSON.parse(window.localStorage.getItem("theme"))
@@ -43,7 +43,7 @@ function App() {
                   <Route path="/customers" element={<Customers />} />
                   <Route path="/customer/:id" element={<Customer />} />
                   <Route path="/products" element={<Products />} />
-                  <Route path="/product/:id" element={<Product />} />
+                  <Route path="/product/:id" element={<ProductNew />} />
                 </Route>
               ) : (
                 <Route path="/" default element={<Login />} />

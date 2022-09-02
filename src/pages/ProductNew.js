@@ -10,142 +10,10 @@ import { motion } from "framer-motion"
 import addNotification from "../functions/addNotification"
 import notificationContext from "../contexts/notificationContext"
 
-const Product = () => {
+const ProductNew = () => {
   const style = css`
     grid-template-columns: 1fr 2fr 1fr;
   `
-
-  // Importing notification context to send to addNotification function
-  const { setNotification } = useContext(notificationContext)
-
-  // Handles all productDataFields
-  const [productDataFields, setProductDataFields] = useState({
-    id: "",
-    name: "",
-    description: "",
-    price: 0,
-    weight: 0,
-    stock: 0,
-    images: [
-      "https://picsum.photos/200",
-      "https://picsum.photos/200",
-      "https://picsum.photos/200",
-      "https://picsum.photos/200",
-    ],
-  })
-
-  const [showBtn, setShowBtn] = useState(false)
-
-  // Handles the heading
-  const [heading, setHeading] = useState(
-    "Editing product - Apple airdots (#AH123)"
-  )
-
-  // Importing useParams to get the id from the url
-  // If id is "add", then we will render the form to add a new product
-  const { id: param } = useParams()
-  console.log(param)
-
-  // FOR TESTING
-  const {
-    fetchData: isData,
-    isLoading: atLoading,
-    error: whatError,
-  } = useDynamicFetch({
-    params: "/products",
-    method: "GET",
-    data: null,
-  })
-  useEffect(() => {
-    console.log(isData)
-  }, [isData])
-
-  const [params, setParams] = useState(null)
-  const [method, setMethod] = useState(null)
-  const [data, setData] = useState(null)
-
-  useEffect(() => {
-    if (param === "add") {
-      setHeading("Now adding new product...")
-      setMethod("POST")
-    } else {
-      setHeading("Loading product...")
-      setParams(`/products/${param}`)
-      setMethod("GET")
-    }
-  }, [])
-
-  // product ID: qw78ge
-  const { fetchData, isLoading, error } = useDynamicFetch({
-    params: params,
-    method: method,
-    data: data,
-  })
-
-  let navigate = useNavigate()
-
-  useEffect(() => {
-    if (method === "GET") {
-      setHeading(`Editing product - ${fetchData.name} (${fetchData.id})`)
-      setProductDataFields((prevState) => {
-        return {
-          ...prevState,
-          id: fetchData.id,
-          name: fetchData.name,
-          description: fetchData.description,
-          price: fetchData.price,
-          weight: fetchData.weightInGrams,
-          stock: fetchData.stock,
-          images: fetchData.images,
-        }
-      })
-    } else if (method === "POST") {
-      setData(productDataFields)
-      addNotification({
-        text: "Product added saved succesfully!",
-        setNotification,
-      })
-      setHeading(`Editing product - ${fetchData.name} (${fetchData.id})`)
-      // Somewhere in your code, e.g. inside a handler:
-      navigate(`/product/${fetchData.id}`)
-      setTimeout(() => {
-        setParams(null)
-        setMethod(null)
-      }, 500)
-    }
-  }, [fetchData])
-
-  // For controling the imageArray with framer reOrder
-  const [imageArray, setImageArray] = useState([
-    "https://picsum.photos/200",
-    "https://picsum.photos/201",
-  ])
-  // For updating in productDataFields when images change
-  useEffect(() => {
-    setProductDataFields((prevState) => ({ ...prevState, images: imageArray }))
-  }, [imageArray])
-
-  // Handles change for productDataFields and replacing in object
-  function handleChange(event) {
-    setShowBtn(true)
-    const { name, value, type, checked } = event.target
-    setProductDataFields((prevState) => {
-      return {
-        ...prevState,
-        [name]: type === "checkbox" ? checked : value,
-      }
-    })
-  }
-
-  // On form submit, we will send the productDataFields to the server
-  function handleSubmit(event) {
-    event.preventDefault()
-    if (param === "add") {
-      setParams("/products")
-      setMethod("POST")
-      console.log("submit nu")
-    }
-  }
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col relative">
@@ -259,23 +127,21 @@ const Product = () => {
           ))}
         </Reorder.Group>
       </div>
-      {showBtn && (
-        <motion.button
-          whileHover={{
-            scale: 1.05,
-            transition: { duration: 0.1 },
-          }}
-          whileTap={{ scale: 0.95 }}
-          type="submit"
-          aria-label="submit form button"
-          spellCheck="false"
-          className="absolute right-0 bottom-0 bg-primary-color text-white px-10 py-6 font-semibold tracking-wider mt-5 focus:bg-primary-background focus:text-primary-color hover:bg-primary-background hover:text-primary-color border-2 border-primary-color transition-colors outline-none"
-        >
-          SUBMIT CHANGES
-        </motion.button>
-      )}
+      <motion.button
+        whileHover={{
+          scale: 1.05,
+          transition: { duration: 0.1 },
+        }}
+        whileTap={{ scale: 0.95 }}
+        type="submit"
+        aria-label="submit form button"
+        spellCheck="false"
+        className="absolute right-0 bottom-0 bg-primary-color text-white px-10 py-6 font-semibold tracking-wider mt-5 focus:bg-primary-background focus:text-primary-color hover:bg-primary-background hover:text-primary-color border-2 border-primary-color transition-colors outline-none"
+      >
+        SUBMIT CHANGES
+      </motion.button>
     </form>
   )
 }
 
-export default Product
+export default ProductNew
