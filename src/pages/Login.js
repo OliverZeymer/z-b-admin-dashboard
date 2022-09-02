@@ -118,7 +118,6 @@ const Login = () => {
           whileTap={{ scale: 0.95 }}
           type="submit"
           aria-label="submit form button"
-          spellCheck="false"
           className="bg-primary-color text-white p-4 font-semibold tracking-wider mt-5 focus:bg-primary-background focus:text-primary-color hover:bg-primary-background hover:text-primary-color border-2 border-primary-color transition-colors outline-none"
         >
           LOG IN

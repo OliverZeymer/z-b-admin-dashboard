@@ -8,11 +8,13 @@ import { useContext } from "react";
 import searchContext from "../contexts/searchContext";
 import { getFilteredItems } from "../functions/getFilteredItems";
 import Loader from "./Loader";
-import tokenContext from "../contexts/tokenContext";
+
+import confirmPopupContext from "../contexts/confirmPopupContext";
+import ConfirmBox from "./ConfirmBox";
 const List = ({ data, type }) => {
   let location = useLocation();
-  const { token } = useContext(tokenContext);
 
+  const { popup, setPopup } = useContext(confirmPopupContext);
   const [mobile, setMobile] = useState();
   const { search, setSearch } = useContext(searchContext);
   useEffect(() => {
@@ -37,16 +39,6 @@ const List = ({ data, type }) => {
     params: `/${type}`,
     method: "GET",
   });
-
-  const deleteItem = async (id) => {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/${type}/${id}`, {
-      method: "DELETE",
-      headers: {
-        authorization: "Bearer " + token,
-        "Content-Type": "application/json",
-      },
-    });
-  };
   const filteredItems = getFilteredItems(search, fetchData, isLoading);
   const placeholder =
     type === "orders"
@@ -169,10 +161,10 @@ const List = ({ data, type }) => {
                           }}
                         />
                       </span>
-                      <span className="pr-2 inline-flex leading-5 font-semibold rounded-full">
+                      <span className="pr-2 inline-flex leading-5 font-semibold rounded-full cursor-pointer">
                         <BsTrash
                           onClick={() => {
-                            deleteItem(item.id);
+                            setPopup([!popup, item.id]);
                           }}
                           size="24"
                         />
@@ -187,6 +179,7 @@ const List = ({ data, type }) => {
               )}
             </tbody>
           </table>
+          <ConfirmBox type={type} />
           {isLoading && <Loader />}
         </>
       ) : (
