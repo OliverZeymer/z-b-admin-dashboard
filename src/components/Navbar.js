@@ -3,7 +3,6 @@ import { NavLink } from "react-router-dom";
 import { useContext } from "react";
 import themeContext from "../contexts/themeContext";
 import { setToLS } from "../functions/setToLS";
-
 const Navbar = () => {
   const { theme, setTheme } = useContext(themeContext);
   setToLS("theme", theme);
