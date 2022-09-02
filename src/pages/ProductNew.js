@@ -1,24 +1,76 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react"
-import { Reorder, useForceUpdate } from "framer-motion"
+import { useForm } from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup"
+import * as yup from "yup"
+import { Reorder } from "framer-motion"
 import { useEffect, useState, useContext } from "react"
-import { useNavigate } from "react-router-dom"
-import { useParams } from "react-router-dom"
 import { BsPlusCircle } from "react-icons/bs"
 import useDynamicFetch from "../hooks/useDynamicFetch"
 import { motion } from "framer-motion"
 import addNotification from "../functions/addNotification"
 import notificationContext from "../contexts/notificationContext"
 
+// Yup scheme for validation
+const schema = yup.object().shape({
+  name: yup.string().required("You have to write an name."),
+  description: yup.string().required("You have to write a description."),
+  price: yup.string().required("You have to write a price."),
+  weight: yup.string().required("You have to write a weight."),
+  stock: yup.string().required("You have to write a stock."),
+})
+
 const ProductNew = () => {
+  // productForm grid
   const style = css`
     grid-template-columns: 1fr 2fr 1fr;
   `
 
+  // Yup resolver
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    resolver: yupResolver(schema),
+  })
+
+  const onSubmitHandler = (data) => {
+    console.log("din na")
+    console.log(data)
+  }
+
+  // Handling all fetchParams, when changes happen, the useDynamicFetch runs
+  const [fetchParams, setFetchParams] = useState({
+    params: "/products",
+    method: "GET",
+    data: null,
+  })
+
+  // Serving fetching (methods used: GET, POST, PATCH)
+  const { fetchData, isLoading, error } = useDynamicFetch(fetchParams)
+
+  // On fetchData change
+  useEffect(() => {
+    //console.log(fetchData)
+  }, [fetchData, isLoading, error])
+
+  // NEEDS TO BE CHANGED
+  const [imageArray, setImageArray] = useState([
+    "https://picsum.photos/200",
+    "https://picsum.photos/201",
+    "https://picsum.photos/202",
+  ])
+
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col relative">
+    <form
+      noValidate
+      className="flex flex-col relative"
+      onSubmit={handleSubmit(onSubmitHandler)}
+    >
       <h2 className="mt-[140px] mb-9 text-2xl font-medium text-primary-text">
-        {heading}
+        Heading
       </h2>
       <div css={style} className="grid gap-[1.5vw]">
         <div className="h-300 w-300">
@@ -34,27 +86,29 @@ const ProductNew = () => {
               Name
             </label>
             <input
+              {...register("name")}
               className="p-2 border w-full border-[rgba(19,19,19,0.25)] outline-none rounded-[3px] font-light focus:border-primary-placeholder placeholder:text-primary-placeholder bg-primary-input text-primary-placeholder"
               type="text"
               name="name"
               id="name"
               autoComplete="off"
-              onChange={handleChange}
-              value={productDataFields.name}
             />
+            <p className="text-[1rem] text-red-600">{errors.name?.message}</p>
           </div>
           <div>
             <label htmlFor="description" className="text-primary-text mb-6">
               Description
             </label>
             <textarea
+              {...register("description")}
               className="p-2 h-[176px] overflow-auto border w-full border-[rgba(19,19,19,0.25)] outline-none rounded-[3px] font-light focus:border-primary-placeholder placeholder:text-primary-placeholder bg-primary-input text-primary-placeholder"
               type="text"
               id="description"
               name="description"
-              onChange={handleChange}
-              value={productDataFields.description}
             />
+            <p className="text-[1rem] text-red-600">
+              {errors.description?.message}
+            </p>
           </div>
         </div>
         <div className="flex flex-col justify-between">
@@ -63,39 +117,39 @@ const ProductNew = () => {
               Price
             </label>
             <input
+              {...register("price")}
               className="p-2 border w-full border-[rgba(19,19,19,0.25)] outline-none rounded-[3px] font-light focus:border-primary-placeholder placeholder:text-primary-placeholder bg-primary-input text-primary-placeholder"
               type="number"
               id="price"
               name="price"
-              onChange={handleChange}
-              value={productDataFields.price}
             />
+            <p className="text-[1rem] text-red-600">{errors.price?.message}</p>
           </div>
           <div>
             <label htmlFor="weight" className="text-primary-text mb-6">
               Weight (In Grams)
             </label>
             <input
+              {...register("weight")}
               className="p-2 border w-full border-[rgba(19,19,19,0.25)] outline-none rounded-[3px] font-light focus:border-primary-placeholder placeholder:text-primary-placeholder bg-primary-input text-primary-placeholder"
               type="number"
               id="weight"
               name="weight"
-              onChange={handleChange}
-              value={productDataFields.weight}
             />
+            <p className="text-[1rem] text-red-600">{errors.weight?.message}</p>
           </div>
           <div>
             <label htmlFor="stock" className="text-primary-text mb-6">
               Stock Amount
             </label>
             <input
+              {...register("stock")}
               className="p-2 border w-full border-[rgba(19,19,19,0.25)] outline-none rounded-[3px] font-light focus:border-primary-placeholder placeholder:text-primary-placeholder bg-primary-input text-primary-placeholder"
               type="number"
               id="stock"
               name="stock"
-              onChange={handleChange}
-              value={productDataFields.stock}
             />
+            <p className="text-[1rem] text-red-600">{errors.stock?.message}</p>
           </div>
         </div>
       </div>

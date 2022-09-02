@@ -1,26 +1,26 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "./pages/Login";
-import Orders from "./pages/Orders";
-import Order from "./pages/Order";
-import Customers from "./pages/Customers";
-import Customer from "./pages/Customer";
-import Products from "./pages/Products";
-import Product from "./pages/Product";
-import tokenContext from "./contexts/tokenContext";
-import notificationContext from "./contexts/notificationContext";
-import Layout from "./components/Layout";
-import { useState } from "react";
-import themeContext from "./contexts/themeContext";
-import { setColors } from "./functions/setColors";
-import searchContext from "./contexts/searchContext";
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+import Login from "./pages/Login"
+import Orders from "./pages/Orders"
+import Order from "./pages/Order"
+import Customers from "./pages/Customers"
+import Customer from "./pages/Customer"
+import Products from "./pages/Products"
+import ProductNew from "./pages/ProductNew"
+import tokenContext from "./contexts/tokenContext"
+import notificationContext from "./contexts/notificationContext"
+import Layout from "./components/Layout"
+import { useState } from "react"
+import themeContext from "./contexts/themeContext"
+import { setColors } from "./functions/setColors"
+import searchContext from "./contexts/searchContext"
 function App() {
-  const [token, setToken] = useState("sfdcnhlisgnchg");
-  const [notification, setNotification] = useState([]);
-  const [search, setSearch] = useState("");
+  const [token, setToken] = useState("sfdcnhlisgnchg")
+  const [notification, setNotification] = useState([])
+  const [search, setSearch] = useState("")
   /*-------------THEME LOCAL STORAGE---------- */
-  const themeLS = JSON.parse(window.localStorage.getItem("theme"));
-  const [savedTheme] = useState(themeLS);
-  const [theme, setTheme] = useState(savedTheme || "light");
+  const themeLS = JSON.parse(window.localStorage.getItem("theme"))
+  const [savedTheme] = useState(themeLS)
+  const [theme, setTheme] = useState(savedTheme || "light")
 
   setColors(
     theme === "dark" ? "var(--darkmode-color)" : "",
@@ -28,7 +28,7 @@ function App() {
     theme === "dark" ? "var(--darkmode-background)" : "",
     theme === "dark" ? "var(--darkmode-theme)" : "",
     theme === "dark" ? "var(--darkmode-input)" : ""
-  );
+  )
   /*------------------------------------------*/
 
   return (
@@ -45,7 +45,7 @@ function App() {
                     <Route path="/customers" element={<Customers />} />
                     <Route path="/customer/:id" element={<Customer />} />
                     <Route path="/products" element={<Products />} />
-                    <Route path="/product/:id" element={<Product />} />
+                    <Route path="/product/:id" element={<ProductNew />} />
                   </Route>
                 ) : (
                   <Route path="/" default element={<Login />} />
@@ -56,7 +56,7 @@ function App() {
         </themeContext.Provider>
       </tokenContext.Provider>
     </notificationContext.Provider>
-  );
+  )
 }
 
-export default App;
+export default App
