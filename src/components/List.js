@@ -3,6 +3,7 @@ import { BsTruck, BsPrinter, BsTrash, BsPencilSquare } from "react-icons/bs";
 import { GoPackage } from "react-icons/go";
 import useDynamicFetch from "../hooks/useDynamicFetch";
 import { useNavigate } from "react-router-dom";
+import Search from "./Search";
 const List = ({ data, type }) => {
   const [mobile, setMobile] = useState();
   window.addEventListener("resize", (event) => {
@@ -24,10 +25,18 @@ const List = ({ data, type }) => {
     params: `/${type}`,
     method: "GET",
   });
-
+  const placeholder =
+    type === "orders"
+      ? "Enter Order ID, Date or Customer"
+      : type === "customers"
+      ? "Enter Customer ID, Date or Customer"
+      : type === "products"
+      ? "Enter Product ID or Product Name"
+      : "";
   const navigate = useNavigate();
   return (
     <>
+      <Search placeholder={placeholder} />
       {!mobile ? (
         <table className="mt-12 flex justify-center sm:table w-full shadow-xl sm:shadow bg-primary-theme text-primary-text rounded-xl sm:rounded">
           <thead className="text-primary-text border-gray text-left">
