@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 import { Reorder } from "framer-motion"
-import { useEffect, useState, useContext } from "react"
+import { useEffect, useState, useContext, useLayoutEffect } from "react"
 import { useParams, useNavigate, Navigate } from "react-router-dom"
 import { BsPlusCircle } from "react-icons/bs"
 import useDynamicFetch from "../hooks/useDynamicFetch"
@@ -61,6 +61,7 @@ const ProductNew = () => {
         method: "GET",
         data: null,
       })
+      // If on add product
     } else {
       setButtonData({ text: "Add product" })
       reset({ name: "", description: "", price: 0, weight: 0, stock: 0 })
@@ -75,6 +76,13 @@ const ProductNew = () => {
       setFetchParams({
         params: "/products",
         method: "POST",
+        data: { ...data, sold: 0 },
+      })
+      // If on specific product, patch data
+    } else {
+      setFetchParams({
+        params: `/products/${param}`,
+        method: "PATCH",
         data: data,
       })
     }
@@ -87,16 +95,29 @@ const ProductNew = () => {
   useEffect(() => {
     // On specific product get
     if (fetchParams.method === "GET") {
+      if (error) {
+        navigate("/products")
+        addNotification({
+          text: "Product not found - find it here, please.",
+          bgColor: "#FF9898",
+          setNotification,
+        })
+      }
+      // Adding product data to form
       setValue("name", fetchData.name)
       setValue("description", fetchData.description)
       setValue("price", fetchData.price)
       setValue("weight", fetchData.weight)
       setValue("stock", fetchData.stock)
-      console.log(fetchData)
-      //setImageArray(fetchData.images)
+      // If add new product
     } else if (fetchParams.method === "POST") {
-      console.log("has posted")
-      console.log(fetchData)
+      // Navigate client to product
+      addNotification({ text: "Product added succesfully!", setNotification })
+      navigate(`/product/${fetchData.id}`)
+      // If patch product
+    } else if (fetchParams.method === "PATCH") {
+      addNotification({ text: "Product update sucessful!", setNotification })
+      setButtonData({ ...buttonData, isShown: false })
     }
   }, [fetchData, isLoading, error])
 
@@ -114,10 +135,19 @@ const ProductNew = () => {
     formState: { errors },
     reset,
     setValue,
+    watch,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: { price: 0, weight: 0, stock: 0 },
   })
+
+  // On form change
+  const watchFields = watch()
+
+  // On imageArray change, show button (but not first render)
+  useLayoutEffect(() => {
+    setButtonData((prevState) => ({ ...prevState, isShown: true }))
+  }, [imageArray])
 
   return (
     <form
@@ -150,6 +180,7 @@ const ProductNew = () => {
               name="name"
               id="name"
               autoComplete="off"
+              onChange={() => setButtonData({ ...buttonData, isShown: true })}
             />
             <p className="text-[1rem] text-red-600">{errors.name?.message}</p>
           </div>
@@ -163,6 +194,7 @@ const ProductNew = () => {
               type="text"
               id="description"
               name="description"
+              onChange={() => setButtonData({ ...buttonData, isShown: true })}
             />
             <p className="text-[1rem] text-red-600">
               {errors.description?.message}
@@ -180,6 +212,7 @@ const ProductNew = () => {
               type="number"
               id="price"
               name="price"
+              onChange={() => setButtonData({ ...buttonData, isShown: true })}
             />
             <p className="text-[1rem] text-red-600">{errors.price?.message}</p>
           </div>
@@ -193,6 +226,7 @@ const ProductNew = () => {
               type="number"
               id="weight"
               name="weight"
+              onChange={() => setButtonData({ ...buttonData, isShown: true })}
             />
             <p className="text-[1rem] text-red-600">{errors.weight?.message}</p>
           </div>
@@ -206,6 +240,7 @@ const ProductNew = () => {
               type="number"
               id="stock"
               name="stock"
+              onChange={() => setButtonData({ ...buttonData, isShown: true })}
             />
             <p className="text-[1rem] text-red-600">{errors.stock?.message}</p>
           </div>
@@ -239,19 +274,23 @@ const ProductNew = () => {
           ))}
         </Reorder.Group>
       </div>
-      <motion.button
-        whileHover={{
-          scale: 1.05,
-          transition: { duration: 0.1 },
-        }}
-        whileTap={{ scale: 0.95 }}
-        type="submit"
-        aria-label="submit form button"
-        spellCheck="false"
-        className="absolute right-0 bottom-0 bg-primary-color text-white px-10 py-6 font-semibold tracking-wider mt-5 focus:bg-primary-background focus:text-primary-color hover:bg-primary-background hover:text-primary-color border-2 border-primary-color transition-colors outline-none"
-      >
-        {buttonData.text}
-      </motion.button>
+      {buttonData.isShown && (
+        <motion.button
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          whileHover={{
+            scale: 1.05,
+            transition: { duration: 0.1 },
+          }}
+          whileTap={{ scale: 0.95 }}
+          type="submit"
+          aria-label="submit form button"
+          spellCheck="false"
+          className="absolute right-0 bottom-0 bg-primary-color text-white px-10 py-6 font-semibold tracking-wider mt-5 focus:bg-primary-background focus:text-primary-color hover:bg-primary-background hover:text-primary-color border-2 border-primary-color transition-colors outline-none"
+        >
+          {buttonData.text}
+        </motion.button>
+      )}
     </form>
   )
 }
