@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 import { Reorder } from "framer-motion"
 import { useEffect, useState, useContext, useLayoutEffect } from "react"
-import { useParams, useNavigate, Navigate } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import { BsPlusCircle } from "react-icons/bs"
 import useDynamicFetch from "../hooks/useDynamicFetch"
 import { motion } from "framer-motion"
@@ -54,6 +54,21 @@ const Product = () => {
   // Gettings params
   const { id: param } = useParams()
 
+  // Yup resolver
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    setValue,
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: { price: 0, weight: 0, stock: 0 },
+  })
+
+  // // On form change
+  // const watchFields = watch()
+
   // On param change
   useEffect(() => {
     // If on specific product
@@ -75,7 +90,7 @@ const Product = () => {
       setButtonData({ text: "Add product" })
       reset({ name: "", description: "", price: 0, weight: 0, stock: 0 })
     }
-  }, [param])
+  }, [param, reset])
 
   // On submit
   const onSubmitHandler = (data) => {
@@ -129,23 +144,8 @@ const Product = () => {
       addNotification({ text: "Product update sucessful!", setNotification })
       setButtonData({ ...buttonData, isShown: false })
     }
+    // eslint-disable-next-line
   }, [fetchData, isLoading, error])
-
-  // Yup resolver
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-    setValue,
-    watch,
-  } = useForm({
-    resolver: yupResolver(schema),
-    defaultValues: { price: 0, weight: 0, stock: 0 },
-  })
-
-  // On form change
-  const watchFields = watch()
 
   // On imageArray change, show button (but not first render)
   useLayoutEffect(() => {
