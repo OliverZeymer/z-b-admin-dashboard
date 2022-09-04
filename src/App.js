@@ -13,10 +13,12 @@ import { useState } from "react";
 import themeContext from "./contexts/themeContext";
 import { setColors } from "./functions/setColors";
 import searchContext from "./contexts/searchContext";
+import confirmPopupContext from "./contexts/confirmPopupContext";
 function App() {
   const [token, setToken] = useState("sfdcnhlisgnchg");
   const [notification, setNotification] = useState([]);
   const [search, setSearch] = useState("");
+  const [popup, setPopup] = useState(false);
   /*-------------THEME LOCAL STORAGE---------- */
   const themeLS = JSON.parse(window.localStorage.getItem("theme"));
   const [savedTheme] = useState(themeLS);
@@ -36,22 +38,24 @@ function App() {
       <tokenContext.Provider value={{ token, setToken }}>
         <themeContext.Provider value={{ theme, setTheme }}>
           <searchContext.Provider value={{ search, setSearch }}>
-            <BrowserRouter>
-              <Routes>
-                {token ? (
-                  <Route path="/" default element={<Layout />}>
-                    <Route path="/orders" element={<Orders />} />
-                    <Route path="/order/:id" element={<Order />} />
-                    <Route path="/customers" element={<Customers />} />
-                    <Route path="/customer/:id" element={<Customer />} />
-                    <Route path="/products" element={<Products />} />
-                    <Route path="/product/:id" element={<Product />} />
-                  </Route>
-                ) : (
-                  <Route path="/" default element={<Login />} />
-                )}
-              </Routes>
-            </BrowserRouter>
+            <confirmPopupContext.Provider value={{ popup, setPopup }}>
+              <BrowserRouter>
+                <Routes>
+                  {token ? (
+                    <Route path="/" default element={<Layout />}>
+                      <Route path="/orders" element={<Orders />} />
+                      <Route path="/order/:id" element={<Order />} />
+                      <Route path="/customers" element={<Customers />} />
+                      <Route path="/customer/:id" element={<Customer />} />
+                      <Route path="/products" element={<Products />} />
+                      <Route path="/product/:id" element={<Product />} />
+                    </Route>
+                  ) : (
+                    <Route path="/" default element={<Login />} />
+                  )}
+                </Routes>
+              </BrowserRouter>
+            </confirmPopupContext.Provider>
           </searchContext.Provider>
         </themeContext.Provider>
       </tokenContext.Provider>
