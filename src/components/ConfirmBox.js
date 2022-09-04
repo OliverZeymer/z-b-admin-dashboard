@@ -1,10 +1,14 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect } from "react";
 import { BsExclamationCircle } from "react-icons/bs";
 
 import confirmPopupContext from "../contexts/confirmPopupContext";
 import tokenContext from "../contexts/tokenContext";
+import addNotification from "../functions/addNotification";
+import notificationContext from "../contexts/notificationContext";
+
 const ConfirmBox = ({ type }) => {
+  const { setNotification } = useContext(notificationContext);
   const overlayVariants = {
     visible: {
       opacity: 1,
@@ -51,6 +55,10 @@ const ConfirmBox = ({ type }) => {
     deleteItem(popup[1]);
     setPopup(false);
     document.querySelector(`#${popup[1]}`).remove();
+    addNotification({
+      text: "Product removed succesfully!",
+      setNotification,
+    });
   }
   function handleNo() {
     setPopup(false);
