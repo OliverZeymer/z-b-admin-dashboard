@@ -16,7 +16,8 @@ const NotificationWidget = () => {
     <ul className="absolute right-2 top-5 flex flex-col gap-3 z-40 overflow-hidden pl-8">
       <AnimatePresence>
         {notification.map((notification) => {
-          const { id, text, icon, removeDelay, bgColor, txtColor } = notification;
+          const { id, text, icon, removeDelay, bgColor, txtColor } =
+            notification;
 
           // Removing notification after set time
           setTimeout(() => {
@@ -34,8 +35,11 @@ const NotificationWidget = () => {
               style={{ backgroundColor: bgColor, color: txtColor }}
             >
               {icon && <IoCheckmarkCircleOutline className="text-2xl" />}
-              <p className="mr-2">{text}</p>
-              <AiOutlineClose onClick={() => delNotification(id)} className="absolute right-0 top-0 cursor-pointer p-3 box-content" />
+              <p className="mr-2 first-letter:capitalize">{text}</p>
+              <AiOutlineClose
+                onClick={() => delNotification(id)}
+                className="absolute right-0 top-0 cursor-pointer p-3 box-content"
+              />
             </motion.li>
           );
         })}
