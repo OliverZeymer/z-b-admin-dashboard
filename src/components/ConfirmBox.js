@@ -56,7 +56,7 @@ const ConfirmBox = ({ type }) => {
     setPopup(false);
     document.querySelector(`#${popup[1]}`).remove();
     addNotification({
-      text: "Product removed succesfully!",
+      text: `${type.slice(0, -1)} succesfully deleted!`,
       setNotification,
     });
   }
