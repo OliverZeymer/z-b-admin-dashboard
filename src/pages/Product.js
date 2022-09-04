@@ -11,6 +11,7 @@ import useDynamicFetch from "../hooks/useDynamicFetch"
 import { motion } from "framer-motion"
 import addNotification from "../functions/addNotification"
 import notificationContext from "../contexts/notificationContext"
+import { AiFillDelete } from "react-icons/ai"
 
 // Yup scheme for validation
 const schema = yup.object().shape({
@@ -41,6 +42,8 @@ const Product = () => {
   // Button data state
   const [buttonData, setButtonData] = useState({ isShown: false, text: "bidi" })
 
+  const [imageArray, setImageArray] = useState([])
+
   // Handling all fetchParams, when changes happen, the useDynamicFetch runs
   const [fetchParams, setFetchParams] = useState({
     params: null,
@@ -61,9 +64,14 @@ const Product = () => {
         method: "GET",
         data: null,
       })
-
       // If on add product
     } else {
+      // Set default images for product added
+      setImageArray([
+        "https://i.imgur.com/udl4HZL.jpeg",
+        "https://i.imgur.com/WA4VdpF.jpg",
+        "https://i.imgur.com/O7AzbV8.jpg",
+      ])
       setButtonData({ text: "Add product" })
       reset({ name: "", description: "", price: 0, weight: 0, stock: 0 })
     }
@@ -79,12 +87,6 @@ const Product = () => {
         method: "POST",
         data: { ...data, sold: 0, images: imageArray },
       })
-      // Set default images for product added
-      setImageArray([
-        "https://i.imgur.com/udl4HZL.jpeg",
-        "https://i.imgur.com/WA4VdpF.jpg",
-        "https://i.imgur.com/O7AzbV8.jpg",
-      ])
       // If on specific product, patch data
     } else {
       setFetchParams({
@@ -129,8 +131,6 @@ const Product = () => {
     }
   }, [fetchData, isLoading, error])
 
-  const [imageArray, setImageArray] = useState([])
-
   // Yup resolver
   const {
     register,
@@ -164,8 +164,12 @@ const Product = () => {
           : `Now editing product - ${fetchData.name} - (${fetchData.id})`}
       </h2>
       <div css={style} className="formTop grid gap-[1.5vw]">
-        <div className="h-300 w-300">
-          <img className="w-full h-full" src={imageArray[0]} alt="Airdots" />
+        <div className="h-300 w-300 grid">
+          {imageArray.length > 0 ? (
+            <img className="w-full h-full" src={imageArray[0]} alt="Alt" />
+          ) : (
+            <p className="place-self-center">No images...</p>
+          )}
         </div>
         <div className="flex flex-col justify-between">
           <div>
@@ -262,11 +266,17 @@ const Product = () => {
         >
           {imageArray.map((image) => (
             <Reorder.Item key={image} value={image}>
-              <div className="w-[100px] h-[100px] shadow-lg cursor-grab">
+              <div className="w-[100px] h-[100px] shadow-lg cursor-grab relative">
+                <AiFillDelete
+                  onClick={() =>
+                    setImageArray(imageArray.filter((img) => img !== image))
+                  }
+                  className="absolute right-2 top-2 cursor-pointer p-1 box-content hover:scale-125 hover:text-primary-color transition-all"
+                />
                 <img
                   className="pointer-events-none"
                   src={image}
-                  alt="Airdots"
+                  alt="Alt tag"
                 />
               </div>
             </Reorder.Item>
