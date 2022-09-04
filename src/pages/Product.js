@@ -1,144 +1,175 @@
 /** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react";
-import { Reorder } from "framer-motion";
-import { useEffect, useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import { useParams } from "react-router-dom";
-import { BsPlusCircle } from "react-icons/bs";
-import useDynamicFetch from "../hooks/useDynamicFetch";
-import { motion } from "framer-motion";
-import addNotification from "../functions/addNotification";
-import notificationContext from "../contexts/notificationContext";
+import { css } from "@emotion/react"
+import { useForm } from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup"
+import * as yup from "yup"
+import { Reorder } from "framer-motion"
+import { useEffect, useState, useContext, useLayoutEffect } from "react"
+import { useParams, useNavigate, Navigate } from "react-router-dom"
+import { BsPlusCircle } from "react-icons/bs"
+import useDynamicFetch from "../hooks/useDynamicFetch"
+import { motion } from "framer-motion"
+import addNotification from "../functions/addNotification"
+import notificationContext from "../contexts/notificationContext"
+import { AiFillDelete } from "react-icons/ai"
+
+// Yup scheme for validation
+const schema = yup.object().shape({
+  name: yup.string().required("You have to write a name."),
+  description: yup.string().required("You have to write a description."),
+  price: yup
+    .number()
+    .required("You have to write a price.")
+    .min(1, "Are you trying making us bankrupt?!"),
+  weight: yup
+    .number()
+    .required("You have to write a weight.")
+    .min(1, "Weight cannot be 0."),
+  stock: yup.number().required("You have to write a stock."),
+})
 
 const Product = () => {
+  let navigate = useNavigate()
+
+  // productForm grid
   const style = css`
     grid-template-columns: 1fr 2fr 1fr;
-  `;
+  `
 
   // Importing notification context to send to addNotification function
-  const { setNotification } = useContext(notificationContext);
+  const { setNotification } = useContext(notificationContext)
 
-  // Handles all productDataFields
-  const [productDataFields, setProductDataFields] = useState({
-    id: "",
-    name: "",
-    description: "",
-    price: 0,
-    weight: 0,
-    stock: 0,
-    images: ["https://picsum.photos/200", "https://picsum.photos/200", "https://picsum.photos/200", "https://picsum.photos/200"],
-  });
+  // Button data state
+  const [buttonData, setButtonData] = useState({ isShown: false, text: "bidi" })
 
-  const [showBtn, setShowBtn] = useState(false);
+  const [imageArray, setImageArray] = useState([])
 
-  // Handles the heading
-  const [heading, setHeading] = useState("Editing product - Apple airdots (#AH123)");
-
-  // Importing useParams to get the id from the url
-  // If id is "add", then we will render the form to add a new product
-  const { id: param } = useParams();
-  console.log(param);
-
-  // FOR TESTING
-  const { fetchData: isData } = useDynamicFetch({
-    params: "/products",
-    method: "GET",
+  // Handling all fetchParams, when changes happen, the useDynamicFetch runs
+  const [fetchParams, setFetchParams] = useState({
+    params: null,
+    method: null,
     data: null,
-  });
-  useEffect(() => {
-    console.log(isData);
-  }, [isData]);
+  })
 
-  const [params, setParams] = useState(null);
-  const [method, setMethod] = useState(null);
-  const [data, setData] = useState(null);
-  /* eslint-disable */
+  // Gettings params
+  const { id: param } = useParams()
+
+  // On param change
   useEffect(() => {
-    if (param === "add") {
-      setHeading("Now adding new product...");
-      setMethod("POST");
+    // If on specific product
+    if (param !== "add") {
+      setButtonData({ text: "Submit Changes" })
+      setFetchParams({
+        params: `/products/${param}`,
+        method: "GET",
+        data: null,
+      })
+      // If on add product
     } else {
-      setHeading("Loading product...");
-      setParams(`/products/${param}`);
-      setMethod("GET");
+      // Set default images for product added
+      setImageArray([
+        "https://i.imgur.com/udl4HZL.jpeg",
+        "https://i.imgur.com/WA4VdpF.jpg",
+        "https://i.imgur.com/O7AzbV8.jpg",
+      ])
+      setButtonData({ text: "Add product" })
+      reset({ name: "", description: "", price: 0, weight: 0, stock: 0 })
     }
-  }, []);
-  /* eslint-enable */
-  // product ID: qw78ge
-  const { fetchData } = useDynamicFetch({
-    params: params,
-    method: method,
-    data: data,
-  });
+  }, [param])
 
-  let navigate = useNavigate();
-  /*eslint-disable*/
-  useEffect(() => {
-    if (method === "GET") {
-      setHeading(`Editing product - ${fetchData.name} (${fetchData.id})`);
-      setProductDataFields((prevState) => {
-        return {
-          ...prevState,
-          id: fetchData.id,
-          name: fetchData.name,
-          description: fetchData.description,
-          price: fetchData.price,
-          weight: fetchData.weightInGrams,
-          stock: fetchData.stock,
-          images: fetchData.images,
-        };
-      });
-    } else if (method === "POST") {
-      setData(productDataFields);
-      addNotification({
-        text: "Product added saved succesfully!",
-        setNotification,
-      });
-      setHeading(`Editing product - ${fetchData.name} (${fetchData.id})`);
-      // Somewhere in your code, e.g. inside a handler:
-      navigate(`/product/${fetchData.id}`);
-      setTimeout(() => {
-        setParams(null);
-        setMethod(null);
-      }, 500);
-    }
-  }, [fetchData]);
-  /*eslint-enable*/
-  // For controling the imageArray with framer reOrder
-  const [imageArray, setImageArray] = useState(["https://picsum.photos/200", "https://picsum.photos/201"]);
-  // For updating in productDataFields when images change
-  useEffect(() => {
-    setProductDataFields((prevState) => ({ ...prevState, images: imageArray }));
-  }, [imageArray]);
-
-  // Handles change for productDataFields and replacing in object
-  function handleChange(event) {
-    setShowBtn(true);
-    const { name, value, type, checked } = event.target;
-    setProductDataFields((prevState) => {
-      return {
-        ...prevState,
-        [name]: type === "checkbox" ? checked : value,
-      };
-    });
-  }
-
-  // On form submit, we will send the productDataFields to the server
-  function handleSubmit(event) {
-    event.preventDefault();
+  // On submit
+  const onSubmitHandler = (data) => {
+    // If on add page
     if (param === "add") {
-      setParams("/products");
-      setMethod("POST");
-      console.log("submit nu");
+      // Post data from form to api
+      setFetchParams({
+        params: "/products",
+        method: "POST",
+        data: { ...data, sold: 0, images: imageArray },
+      })
+      // If on specific product, patch data
+    } else {
+      setFetchParams({
+        params: `/products/${param}`,
+        method: "PATCH",
+        data: { ...data, images: imageArray },
+      })
     }
   }
+
+  // Serving fetching (methods used: GET, POST, PATCH)
+  const { fetchData, isLoading, error } = useDynamicFetch(fetchParams)
+
+  // On fetchData change
+  useEffect(() => {
+    // On specific product get
+    if (fetchParams.method === "GET") {
+      if (error) {
+        navigate("/products")
+        addNotification({
+          text: "Product not found - find it here, please.",
+          bgColor: "#FF9898",
+          setNotification,
+        })
+      }
+      // Adding product data to form
+      setValue("name", fetchData.name)
+      setValue("description", fetchData.description)
+      setValue("price", fetchData.price)
+      setValue("weight", fetchData.weight)
+      setValue("stock", fetchData.stock)
+      setImageArray(fetchData.images)
+      // If add new product
+    } else if (fetchParams.method === "POST") {
+      // Navigate client to product
+      addNotification({ text: "Product added succesfully!", setNotification })
+      navigate(`/product/${fetchData.id}`)
+      // If patch product
+    } else if (fetchParams.method === "PATCH") {
+      addNotification({ text: "Product update sucessful!", setNotification })
+      setButtonData({ ...buttonData, isShown: false })
+    }
+  }, [fetchData, isLoading, error])
+
+  // Yup resolver
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    setValue,
+    watch,
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: { price: 0, weight: 0, stock: 0 },
+  })
+
+  // On form change
+  const watchFields = watch()
+
+  // On imageArray change, show button (but not first render)
+  useLayoutEffect(() => {
+    setButtonData((prevState) => ({ ...prevState, isShown: true }))
+  }, [imageArray])
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col relative">
-      <h2 className="mt-[140px] mb-9 text-2xl font-medium text-primary-text">{heading}</h2>
-      <div css={style} className="grid gap-[1.5vw]">
-        <div className="h-300 w-300">
-          <img className="w-full h-full" src="https://picsum.photos/200" alt="Airdots" />
+    <form
+      noValidate
+      className="flex flex-col relative"
+      onSubmit={handleSubmit(onSubmitHandler)}
+    >
+      <h2 className="mt-[140px] mb-9 text-2xl font-medium text-primary-text">
+        {param === "add"
+          ? "Now adding new product..."
+          : `Now editing product - ${fetchData.name} - (${fetchData.id})`}
+      </h2>
+      <div css={style} className="formTop grid gap-[1.5vw]">
+        <div className="h-300 w-300 grid">
+          {imageArray.length > 0 ? (
+            <img className="w-full h-full" src={imageArray[0]} alt="Alt" />
+          ) : (
+            <p className="place-self-center">No images...</p>
+          )}
         </div>
         <div className="flex flex-col justify-between">
           <div>
@@ -146,92 +177,116 @@ const Product = () => {
               Name
             </label>
             <input
+              {...register("name")}
               className="p-2 border w-full border-[rgba(19,19,19,0.25)] outline-none rounded-[3px] font-light focus:border-primary-placeholder placeholder:text-primary-placeholder bg-primary-input text-primary-placeholder"
               type="text"
               name="name"
               id="name"
               autoComplete="off"
-              onChange={handleChange}
-              value={productDataFields.name}
+              onChange={() => setButtonData({ ...buttonData, isShown: true })}
             />
+            <p className="text-[1rem] text-red-600">{errors.name?.message}</p>
           </div>
           <div>
             <label htmlFor="description" className="text-primary-text mb-6">
               Description
             </label>
             <textarea
+              {...register("description")}
               className="p-2 h-[176px] overflow-auto border w-full border-[rgba(19,19,19,0.25)] outline-none rounded-[3px] font-light focus:border-primary-placeholder placeholder:text-primary-placeholder bg-primary-input text-primary-placeholder"
               type="text"
               id="description"
               name="description"
-              onChange={handleChange}
-              value={productDataFields.description}
+              onChange={() => setButtonData({ ...buttonData, isShown: true })}
             />
+            <p className="text-[1rem] text-red-600">
+              {errors.description?.message}
+            </p>
           </div>
         </div>
-        <div className="flex flex-col justify-between">
+        <div className="formMiddle flex flex-col justify-between">
           <div>
             <label htmlFor="price" className="text-primary-text mb-6">
               Price
             </label>
             <input
+              {...register("price")}
               className="p-2 border w-full border-[rgba(19,19,19,0.25)] outline-none rounded-[3px] font-light focus:border-primary-placeholder placeholder:text-primary-placeholder bg-primary-input text-primary-placeholder"
               type="number"
               id="price"
               name="price"
-              onChange={handleChange}
-              value={productDataFields.price}
+              onChange={() => setButtonData({ ...buttonData, isShown: true })}
             />
+            <p className="text-[1rem] text-red-600">{errors.price?.message}</p>
           </div>
           <div>
             <label htmlFor="weight" className="text-primary-text mb-6">
               Weight (In Grams)
             </label>
             <input
+              {...register("weight")}
               className="p-2 border w-full border-[rgba(19,19,19,0.25)] outline-none rounded-[3px] font-light focus:border-primary-placeholder placeholder:text-primary-placeholder bg-primary-input text-primary-placeholder"
               type="number"
               id="weight"
               name="weight"
-              onChange={handleChange}
-              value={productDataFields.weight}
+              onChange={() => setButtonData({ ...buttonData, isShown: true })}
             />
+            <p className="text-[1rem] text-red-600">{errors.weight?.message}</p>
           </div>
           <div>
             <label htmlFor="stock" className="text-primary-text mb-6">
               Stock Amount
             </label>
             <input
+              {...register("stock")}
               className="p-2 border w-full border-[rgba(19,19,19,0.25)] outline-none rounded-[3px] font-light focus:border-primary-placeholder placeholder:text-primary-placeholder bg-primary-input text-primary-placeholder"
               type="number"
               id="stock"
               name="stock"
-              onChange={handleChange}
-              value={productDataFields.stock}
+              onChange={() => setButtonData({ ...buttonData, isShown: true })}
             />
+            <p className="text-[1rem] text-red-600">{errors.stock?.message}</p>
           </div>
         </div>
       </div>
       <p className="text-primary-text mb-1 mt-8">Image control</p>
       <div className="p-5 max-w-fit border w-full border-[rgba(19,19,19,0.25)] outline-none rounded-[3px] font-light focus:border-primary-placeholder placeholder:text-primary-placeholder bg-primary-input text-primary-placeholder">
-        <div className="flex justify-between">
-          <p>Images (4) - drag to change index</p>
+        <div className="flex justify-between gap-7">
+          <p>Images ({imageArray.length}) - drag to change index</p>
           <p className="flex items-center gap-2 cursor-pointer">
             Click here to upload
             <BsPlusCircle size="20px" />
           </p>
         </div>
-        <Reorder.Group className="flex gap-5 mt-5" axis="x" values={imageArray} onReorder={setImageArray}>
+        <Reorder.Group
+          className="flex gap-5 mt-5"
+          axis="x"
+          values={imageArray}
+          onReorder={setImageArray}
+        >
           {imageArray.map((image) => (
             <Reorder.Item key={image} value={image}>
-              <div className="max-h-50 max-w-50 shadow-lg cursor-grab">
-                <img className="pointer-events-none" src={image} alt="Airdots" />
+              <div className="w-[100px] h-[100px] shadow-lg cursor-grab relative">
+                <AiFillDelete
+                  onClick={() =>
+                    setImageArray(imageArray.filter((img) => img !== image))
+                  }
+                  className="absolute right-2 top-2 cursor-pointer p-1 box-content hover:scale-125 hover:text-primary-color transition-all"
+                />
+                <img
+                  className="pointer-events-none"
+                  src={image}
+                  alt="Alt tag"
+                />
               </div>
             </Reorder.Item>
           ))}
         </Reorder.Group>
       </div>
-      {showBtn && (
+      {buttonData.isShown && (
         <motion.button
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           whileHover={{
             scale: 1.05,
             transition: { duration: 0.1 },
@@ -242,11 +297,11 @@ const Product = () => {
           spellCheck="false"
           className="absolute right-0 bottom-0 bg-primary-color text-white px-10 py-6 font-semibold tracking-wider mt-5 focus:bg-primary-background focus:text-primary-color hover:bg-primary-background hover:text-primary-color border-2 border-primary-color transition-colors outline-none"
         >
-          SUBMIT CHANGES
+          {buttonData.text}
         </motion.button>
       )}
     </form>
-  );
-};
+  )
+}
 
-export default Product;
+export default Product

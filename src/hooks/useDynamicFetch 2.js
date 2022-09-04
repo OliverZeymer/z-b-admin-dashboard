@@ -1,4 +1,5 @@
-// Methods supported [PATCH, DELETE, POST, GET]
+// Notes for me
+// PUT, PATCH, DELETE, POST, GET
 
 import { useEffect, useState, useContext } from "react"
 import tokenContext from "../contexts/tokenContext"
@@ -13,9 +14,9 @@ export default function useDynamicFetch({ params, method, data }) {
 
   useEffect(
     function () {
-      if (params) {
-        // Dette er en IIFE (immediately invoked function expression)
-        ;(async function () {
+      // Dette er en IIFE (immediately invoked function expression)
+      ;(async function () {
+        try {
           const response = await fetch(
             `${process.env.REACT_APP_API_URL}${params}`,
             {
@@ -24,19 +25,20 @@ export default function useDynamicFetch({ params, method, data }) {
                 authorization: "Bearer " + token,
                 "Content-Type": "application/json",
               },
-              body: data !== null ? JSON.stringify(data) : null,
+              body: data === {} ? JSON.stringify(data) : null,
             }
           )
-          if (response.status === 404) {
-            setError(response.statusText)
-          }
+
           const json = await response.json()
+          console.log(json)
           setFetchData(json)
           setIsLoading(false)
-        })()
-      }
+        } catch (error) {
+          setError(error)
+        }
+      })()
     },
-    [params, token, data, method]
+    [params, token]
   )
 
   return { fetchData, isLoading, error }
