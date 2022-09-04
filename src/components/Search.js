@@ -1,8 +1,7 @@
 import searchContext from "../contexts/searchContext";
 import { useContext } from "react";
 const Search = ({ placeholder }) => {
-  const { search, setSearch } = useContext(searchContext);
-  console.log(search);
+  const { setSearch } = useContext(searchContext);
   return (
     <div className="mt-6">
       <p className="text-primary-text mb-4">Search</p>
