@@ -295,7 +295,7 @@ const Product = () => {
           type="submit"
           aria-label="submit form button"
           spellCheck="false"
-          className="absolute right-0 bottom-0 bg-primary-color text-white px-10 py-6 font-semibold tracking-wider mt-5 focus:bg-primary-background focus:text-primary-color hover:bg-primary-background hover:text-primary-color border-2 border-primary-color transition-colors outline-none"
+          className="absolute border-black right-0 bottom-0 bg-primary-color text-white px-10 py-6 font-semibold tracking-wider mt-5 focus:bg-primary-background focus:text-primary-color hover:bg-primary-background hover:text-primary-color border-2 transition-colors outline-none"
         >
           {buttonData.text}
         </motion.button>
