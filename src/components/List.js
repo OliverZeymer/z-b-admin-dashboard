@@ -1,45 +1,45 @@
-import { useEffect, useState } from "react";
-import { BsTruck, BsPrinter, BsTrash, BsPencilSquare } from "react-icons/bs";
-import { GoPackage } from "react-icons/go";
-import useDynamicFetch from "../hooks/useDynamicFetch";
-import { useLocation, useNavigate } from "react-router-dom";
-import Search from "./Search";
-import { useContext } from "react";
-import searchContext from "../contexts/searchContext";
-import { getFilteredItems } from "../functions/getFilteredItems";
-import Loader from "./Loader";
+import { useEffect, useState } from "react"
+import { BsTruck, BsPrinter, BsTrash, BsPencilSquare } from "react-icons/bs"
+import { GoPackage } from "react-icons/go"
+import useDynamicFetch from "../hooks/useDynamicFetch"
+import { useLocation, useNavigate } from "react-router-dom"
+import Search from "./Search"
+import { useContext } from "react"
+import searchContext from "../contexts/searchContext"
+import { getFilteredItems } from "../functions/getFilteredItems"
+import Loader from "./Loader"
 
-import confirmPopupContext from "../contexts/confirmPopupContext";
-import ConfirmBox from "./ConfirmBox";
+import confirmPopupContext from "../contexts/confirmPopupContext"
+import ConfirmBox from "./ConfirmBox"
 const List = ({ data, type }) => {
-  let location = useLocation();
+  let location = useLocation()
 
-  const { popup, setPopup } = useContext(confirmPopupContext);
-  const [mobile, setMobile] = useState();
-  const { search, setSearch } = useContext(searchContext);
+  const { popup, setPopup } = useContext(confirmPopupContext)
+  const [mobile, setMobile] = useState()
+  const { search, setSearch } = useContext(searchContext)
   useEffect(() => {
-    setSearch("");
-  }, [location, setSearch]);
+    setSearch("")
+  }, [location, setSearch])
   window.addEventListener("resize", (event) => {
     if (event.target.innerWidth <= 640) {
-      setMobile(true);
+      setMobile(true)
     } else {
-      setMobile(false);
+      setMobile(false)
     }
-  });
+  })
   useEffect(() => {
     if (window.innerWidth <= 640) {
-      setMobile(true);
+      setMobile(true)
     } else {
-      setMobile(false);
+      setMobile(false)
     }
-  }, []);
+  }, [])
 
   const { fetchData, isLoading, error } = useDynamicFetch({
     params: `/${type}`,
     method: "GET",
-  });
-  const filteredItems = getFilteredItems(search, fetchData, isLoading);
+  })
+  const filteredItems = getFilteredItems(search, fetchData, isLoading)
   const placeholder =
     type === "orders"
       ? "Enter Order ID, Date or Customer"
@@ -47,8 +47,8 @@ const List = ({ data, type }) => {
       ? "Enter Customer ID, Name, Phone or Address"
       : type === "products"
       ? "Enter Product ID or Product Name"
-      : "";
-  const navigate = useNavigate();
+      : ""
+  const navigate = useNavigate()
 
   return (
     <>
@@ -93,7 +93,7 @@ const List = ({ data, type }) => {
                       className="px-6 py-3 whitespace-no-wrap sm:border-b border-gray-200"
                       onClick={() => {
                         if (type === "products") {
-                          navigate(`/product/${item.id}`);
+                          navigate(`/product/${item.id}`)
                         }
                       }}
                     >
@@ -198,7 +198,7 @@ const List = ({ data, type }) => {
                           size="24"
                           onClick={() => {
                             if (type === "products") {
-                              navigate(`/product/${item.id}`);
+                              navigate(`/product/${item.id}`)
                             }
                           }}
                         />
@@ -206,7 +206,7 @@ const List = ({ data, type }) => {
                       <span className="pr-2 inline-flex leading-5 font-semibold rounded-full cursor-pointer">
                         <BsTrash
                           onClick={() => {
-                            setPopup([!popup, item.id]);
+                            setPopup([!popup, item.id])
                           }}
                           size="24"
                         />
@@ -368,7 +368,7 @@ const List = ({ data, type }) => {
         </div>
       )}
     </>
-  );
-};
+  )
+}
 
-export default List;
+export default List
