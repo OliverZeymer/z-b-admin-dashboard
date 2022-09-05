@@ -9,10 +9,21 @@ import { NavLink, Link } from "react-router-dom"
 import { useContext } from "react"
 import themeContext from "../contexts/themeContext"
 import { setToLS } from "../functions/setToLS"
+import { BiLogOut } from "react-icons/bi"
+import { useNavigate } from "react-router-dom"
+import tokenContext from "../contexts/tokenContext"
 
 const Navbar = () => {
   const { theme, setTheme } = useContext(themeContext)
   setToLS("theme", theme)
+  const { setToken } = useContext(tokenContext)
+  const navigate = useNavigate()
+
+  function signout() {
+    setToken(null)
+    navigate("/")
+  }
+
   return (
     <nav className="z-40 flex fixed sm:static sm:block bottom-0 w-screen select-none sm:w-[260px] sm:min-h-screen sm:max-h-full bg-primary-theme">
       <div className="wrapper h-full w-10/12 sm:w-4/5 mx-auto py-4 sm:py-8">
@@ -67,7 +78,14 @@ const Navbar = () => {
             <p className="hidden sm:block">Add Product</p>
           </NavLink>
           <button
-            className="text-[16px] gap-4 flex font-medium hover:scale-105 transition-all items-center text-primary-text mt-auto"
+            onClick={() => signout()}
+            className="hidden sm:flex text-[16px] gap-4 font-medium hover:scale-105 transition-all items-center text-primary-text mt-auto"
+          >
+            <BiLogOut className="w-[32px] h-[32px] sm:w-[24px] sm:h-[24px]" />{" "}
+            Log out
+          </button>
+          <button
+            className="text-[16px] gap-4 flex font-medium hover:scale-105 transition-all items-center text-primary-text"
             onClick={() => {
               setTheme(theme === "light" ? "dark" : "light")
             }}

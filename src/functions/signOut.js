@@ -1,7 +1,10 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"
+import tokenContext from "../contexts/tokenContext"
+import { useContext } from "react"
 
-const navigate = useNavigate();
 export default function signout() {
-  setToken(null);
-  navigate("/");
+  const { setToken } = useContext(tokenContext)
+  const navigate = useNavigate()
+  setToken(null)
+  navigate("/")
 }
