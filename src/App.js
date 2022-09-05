@@ -15,7 +15,7 @@ import { setColors } from "./functions/setColors"
 import searchContext from "./contexts/searchContext"
 import confirmPopupContext from "./contexts/confirmPopupContext"
 function App() {
-  const [token, setToken] = useState("sfdcnhlisgnchg")
+  const [token, setToken] = useState(false) // token sfdcnhlisgnchg
   const [notification, setNotification] = useState([])
   const [search, setSearch] = useState("")
   const [popup, setPopup] = useState(false)
