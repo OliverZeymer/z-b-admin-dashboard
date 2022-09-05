@@ -43,7 +43,7 @@ function App() {
                 <Routes>
                   {token ? (
                     <Route path="/" default element={<Layout />}>
-                      <Route path="/orders" element={<Orders />} />
+                      <Route path="/" element={<Orders />} />
                       <Route path="/order/:id" element={<Order />} />
                       <Route path="/customers" element={<Customers />} />
                       <Route path="/customer/:id" element={<Customer />} />
